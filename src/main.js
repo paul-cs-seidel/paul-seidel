@@ -18,7 +18,6 @@ import { mount as mountTransition } from './effects/page-transition/page-transit
 import { mount as mountTextReveal } from './effects/text-reveal/text-reveal.js';
 import { mount as mountGallery } from './effects/projects-gallery/projects-gallery.js';
 import { mount as mountFractalEffect } from './effects/fractalEffect/fractalEffect.js';
-import { mount as mountOiEffect } from './effects/webgl-effect/webgl-oi.js';
 
 
 gsap.registerPlugin(Flip);
@@ -105,13 +104,6 @@ async function navigate(route) {
       onHover: (id) => (id ? showReadout(id) : hideReadout()),
       onSelect: (id, el) => openZoom(id, el),
     });
-  }
-  if (route === 'contact') {
-    const contactPanel = panels.get('contact');
-    // Kleiner Timeout, damit das Panel sicher sichtbar ist
-    setTimeout(() => {
-      mountOiEffect(contactPanel);
-    }, 400);
   }
   busy = false;
 }
@@ -289,4 +281,3 @@ function closeZoom() {
 
 zoom.querySelector('[data-zoom-close]').addEventListener('click', closeZoom);
 document.addEventListener('keydown', (e) => e.key === 'Escape' && closeZoom());
-

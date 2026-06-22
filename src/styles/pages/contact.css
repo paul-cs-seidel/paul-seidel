@@ -78,11 +78,4 @@
   user-select: none;
 }
 
-.Oi {
-  display: inline-block;
-  position: relative;
-}
-.oi-canvas {
-  /* Sorgt dafür, dass der Canvas über allem liegt, aber Klicks durchlässt */
-  pointer-events: none;
-}
+
