@@ -19,6 +19,7 @@ body {
   margin: 0;
   font-family: helvetica-neue-lt-pro, sans-serif;
   overflow: hidden;
+  z-index: 0;
 }
 
 button,

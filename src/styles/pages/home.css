@@ -1,24 +1,15 @@
 /* Seite — Home (Hero, Profil, Meta, WebGL-BG) — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
 .hero-section {
-  align-items: start;
+  background-image: url("/src/assets/Hero.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  z-index: 1;
 }
 
-.webgl-background {
-  z-index: 0;
-  overscroll-behavior: none;
-  touch-action: none;
-  background: #fff;
-  position: fixed;
-  inset: 0;
-}
-
-.webgl-background canvas {
-  touch-action: none;
-  display: block;
-}
 
 .experience-page--home {
   color: #0b0b0a;
