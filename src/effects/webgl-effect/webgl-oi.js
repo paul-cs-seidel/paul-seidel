@@ -1,107 +1,97 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { vertexShader, fragmentShader } from './MSDFShader.js';
 
-export class OiWebGL {
-    constructor() {
-        this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.camera.position.z = 5;
-
-        this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        this.container = document.body;
-        this.renderer.domElement.classList.add('oi-canvas');
-        Object.assign(this.renderer.domElement.style, {
-            position: 'fixed', top: 0, left: 0, pointerEvents: 'none', zIndex: 100
-        });
-        this.container.appendChild(this.renderer.domElement);
-
-        this.meshes = [];
-        this.fontData = null;
-        this.texture = null;
-
-        this.init();
+const vertexShader = `
+  varying vec2 vUv;
+  uniform float uTime;
+  uniform float uHover;
+  void main() {
+    vUv = uv;
+    vec3 pos = position;
+    // Subtile Wellenbewegung nur bei Hover
+    if(uHover > 0.0) {
+        pos.x += sin(pos.y * 8.0 + uTime * 2.0) * (0.03 * uHover);
     }
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+  }
+`;
 
-    async init() {
-        // 1. Lade Font Assets (Pfade anpassen!)
-        const fontJson = await fetch('./assets/fonts/PPNeueMontreal-Medium.json').then(res => res.json());
-        const fontTexture = new THREE.TextureLoader().load('./assets/fonts/PPNeueMontreal-Medium.png');
+const fragmentShader = `
+  varying vec2 vUv;
+  uniform sampler2D uMap;
+  uniform float uOpacity;
+  
+  float median(float r, float g, float b) {
+    return max(min(r, g), min(max(r, g), b));
+  }
 
-        this.fontData = fontJson;
-        this.texture = fontTexture;
+  void main() {
+    vec3 sample = texture2D(uMap, vUv).rgb;
+    float sigDist = median(sample.r, sample.g, sample.b) - 0.5;
+    float alpha = clamp(sigDist / fwidth(sigDist) + 0.5, 0.0, 1.0);
+    gl_FragColor = vec4(1.0, 1.0, 1.0, alpha * uOpacity);
+  }
+`;
 
-        this.createEffect();
-        this.animate();
+export function mount(container) {
+    const target = container.querySelector('.Oi');
+    if (!target) return;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 5;
+
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.domElement.style.cssText = 'position:fixed; top:0; left:0; pointer-events:none; z-index:1000;';
+    document.body.appendChild(renderer.domElement);
+
+    // Textur laden (Vite nutzt /public als Root, also kein "public/" im Pfad)
+    const tex = new THREE.TextureLoader().load('/assets/fonts/PPNeueMontreal-Medium.png');
+
+    const material = new THREE.ShaderMaterial({
+        uniforms: {
+            uMap: { value: tex },
+            uTime: { value: 0 },
+            uOpacity: { value: 0 },
+            uHover: { value: 0 }
+        },
+        vertexShader,
+        fragmentShader,
+        transparent: true
+    });
+
+    // Plane erstellen (Größe des SCHREIB MIR Texts)
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 0.6), material);
+    scene.add(mesh);
+
+    const link = target.closest('a');
+    link.addEventListener('mouseenter', () => {
+        gsap.to(material.uniforms.uOpacity, { value: 1, duration: 0.4 });
+        gsap.to(material.uniforms.uHover, { value: 1, duration: 0.8, ease: "power2.out" });
+        target.style.opacity = "0"; // Statischen Text verstecken
+    });
+
+    link.addEventListener('mouseleave', () => {
+        gsap.to(material.uniforms.uOpacity, { value: 0, duration: 0.4 });
+        gsap.to(material.uniforms.uHover, { value: 0, duration: 0.8 });
+        target.style.opacity = "1";
+    });
+
+    function animate() {
+        material.uniforms.uTime.value += 0.05;
+
+        // Position des Mesh mit dem DOM Element synchronisieren
+        const rect = target.getBoundingClientRect();
+        const x = (rect.left + rect.width / 2) / window.innerWidth * 2 - 1;
+        const y = -(rect.top + rect.height / 2) / window.innerHeight * 2 + 1;
+
+        mesh.position.x = x * 2.8;
+        mesh.position.y = y * 1.8;
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
     }
-
-    createEffect() {
-        const targets = document.querySelectorAll('.Oi');
-
-        targets.forEach(el => {
-            const text = el.getAttribute('data-text') || el.innerText;
-            const distortion = parseFloat(el.getAttribute('data-w')) || 1;
-
-            // Erstelle für das ganze Wort ein Plane (vereinfacht für Performance)
-            // Im Original wird jeder Buchstabe einzeln berechnet, hier nutzen wir den Atlas
-            const geometry = new THREE.PlaneGeometry(text.length * 0.5, 1);
-            const material = new THREE.ShaderMaterial({
-                uniforms: {
-                    uMap: { value: this.texture },
-                    uTime: { value: 0 },
-                    uColor: { value: new THREE.Color(0xffffff) },
-                    uOpacity: { value: 0 },
-                    uDistortion: { value: distortion },
-                    uHover: { value: 0 }
-                },
-                vertexShader,
-                fragmentShader,
-                transparent: true
-            });
-
-            const mesh = new THREE.Mesh(geometry, material);
-            this.scene.add(mesh);
-
-            const item = { el, mesh, material };
-            this.meshes.push(item);
-
-            // Mouse Events am Parent Link
-            const link = el.closest('a');
-            if(link) {
-                link.addEventListener('mouseenter', () => {
-                    gsap.to(material.uniforms.uHover, { value: 1, duration: 1, ease: "expo.out" });
-                    gsap.to(material.uniforms.uOpacity, { value: 1, duration: 0.5 });
-                    el.style.visibility = 'hidden';
-                });
-                link.addEventListener('mouseleave', () => {
-                    gsap.to(material.uniforms.uHover, { value: 0, duration: 1, ease: "expo.out" });
-                    gsap.to(material.uniforms.uOpacity, { value: 0, duration: 0.5 });
-                    el.style.visibility = 'visible';
-                });
-            }
-        });
-    }
-
-    animate() {
-        this.meshes.forEach(m => {
-            m.material.uniforms.uTime.value += 0.05;
-
-            // Sync WebGL Mesh mit DOM Position
-            const rect = m.el.getBoundingClientRect();
-            const x = (rect.left + rect.width / 2) / window.innerWidth * 2 - 1;
-            const y = -(rect.top + rect.height / 2) / window.innerHeight * 2 + 1;
-
-            // Mapping auf 3D Raum
-            m.mesh.position.x = x * 2.5;
-            m.mesh.position.y = y * 1.5;
-        });
-
-        this.renderer.render(this.scene, this.camera);
-        requestAnimationFrame(() => this.animate());
-    }
+    animate();
 }
-
-export const mount = () => new OiWebGL();
