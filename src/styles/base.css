@@ -1,0 +1,29 @@
+/* Base / Reset — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--background);
+  width: 100%;
+  height: 100%;
+  color: var(--foreground);
+  margin: 0;
+  font-family: helvetica-neue-lt-pro, sans-serif;
+  overflow: hidden;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}

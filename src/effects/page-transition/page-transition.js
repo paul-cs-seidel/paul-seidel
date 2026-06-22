@@ -1,0 +1,160 @@
+/*
+ * page-transition — Hirotos Clip-Path-Seitenübergang, framework-frei nachgebaut.
+ *
+ * Eine vollflächige Fläche (`.page-transition`) wird eingeblendet; ihr per SVG
+ * `clipPath` definierter Wellen-Pfad morpht von „voll deckend" (covered) über
+ * die Mitte (mid) zu „freigegeben" (revealed) — die einlaufende Seite wird so
+ * von unten aufgewischt. Parallel dimmt die Helligkeit kurz ab.
+ *
+ * Original: Komponente `s7` (_raw/vendor/050096.app-bundle.js ab Z7521), Clip-
+ * Geometrie/Helfer `ot/oi/on/or` (Z7783–7807), Timeline (Z7698). Antrieb GSAP
+ * + CustomEase (Signatur-Eases der App). Werte: ./page-transition.config.js.
+ *
+ * Abstrahiert: Das Original schnappschießt die *alte* Seite (DOM-Klon, Bild-
+ * Rasterung, WebGL-Canvas) in `.page-transition__source-snapshot`. Diese
+ * React/App-Maschinerie entfällt hier; `transition({ snapshot })` nimmt optional
+ * ein fertiges Schnappschuss-Element. Der Clip-Reveal selbst ist 1:1.
+ */
+import gsap from 'gsap';
+import CustomEase from 'gsap/CustomEase';
+
+import {
+  DEFAULT_TRANSITION_OPTIONS,
+  TRANSITION_CLASSES,
+  TRANSITION_CLIP_ID,
+  TRANSITION_EASES,
+  TRANSITION_VARS,
+} from './page-transition.config.js';
+
+gsap.registerPlugin(CustomEase);
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+// CustomEases einmalig registrieren und als Instanzen bereithalten.
+const EASES = Object.fromEntries(
+  Object.entries(TRANSITION_EASES).map(([key, { name, path }]) => [key, CustomEase.create(name, path)]),
+);
+
+// Stage-Maße: ein 100×100-Feld, das den Viewport komplett überdeckt (ot, Z7783).
+function stage(win) {
+  const w = win.innerWidth;
+  const scale = Math.max(w / 100, win.innerHeight / 100);
+  const leftX = (w - 100 * scale) / 2;
+  return { centerX: w / 2, leftX, rightX: leftX + 100 * scale, scale };
+}
+
+// Reiner Wellen-Pfad (oi, Z7805).
+function wavePath(shape, m) {
+  return `M ${m.leftX} ${shape.originY * m.scale} V ${shape.edgeY * m.scale} Q ${m.centerX} ${shape.controlY * m.scale} ${m.rightX} ${shape.edgeY * m.scale} V ${shape.closeY * m.scale} z`;
+}
+
+// Voll deckend: nur die Welle, nonzero (or, Z7789).
+function drawCovered(path, shape, m) {
+  path.setAttribute('clip-rule', 'nonzero');
+  path.setAttribute('fill-rule', 'nonzero');
+  path.setAttribute('d', wavePath(shape, m));
+}
+
+// Reveal: Vollrechteck MINUS Welle, evenodd (on, Z7795).
+function drawMorph(path, shape, m) {
+  path.setAttribute('clip-rule', 'evenodd');
+  path.setAttribute('fill-rule', 'evenodd');
+  path.setAttribute(
+    'd',
+    [`M ${m.leftX} 0`, `H ${m.rightX}`, `V ${100 * m.scale}`, `H ${m.leftX}`, 'z', wavePath(shape, m)].join(' '),
+  );
+}
+
+function createMarkup(doc) {
+  const root = doc.createElement('div');
+  root.className = TRANSITION_CLASSES.root;
+  root.setAttribute('aria-hidden', 'true');
+
+  const svg = doc.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('class', TRANSITION_CLASSES.clipDefs);
+  svg.setAttribute('aria-hidden', 'true');
+  const defs = doc.createElementNS(SVG_NS, 'defs');
+  const clip = doc.createElementNS(SVG_NS, 'clipPath');
+  clip.setAttribute('id', TRANSITION_CLIP_ID);
+  clip.setAttribute('clipPathUnits', 'userSpaceOnUse');
+  const clipPath = doc.createElementNS(SVG_NS, 'path');
+  clip.append(clipPath);
+  defs.append(clip);
+  svg.append(defs);
+
+  const next = doc.createElement('div');
+  next.className = TRANSITION_CLASSES.next;
+  next.style.clipPath = `url(#${TRANSITION_CLIP_ID})`;
+  next.style.webkitClipPath = `url(#${TRANSITION_CLIP_ID})`;
+  const nextContent = doc.createElement('div');
+  nextContent.className = TRANSITION_CLASSES.nextContent;
+  const snapshot = doc.createElement('div');
+  snapshot.className = TRANSITION_CLASSES.sourceSnapshot;
+  nextContent.append(snapshot);
+  next.append(nextContent);
+
+  root.append(svg, next);
+  return { root, clipPath, next, nextContent, snapshot };
+}
+
+export function mount(root = globalThis.document?.body, options = {}) {
+  if (!root) return { destroy() {}, transition: () => Promise.resolve() };
+  const doc = root.ownerDocument;
+  const win = doc.defaultView ?? globalThis;
+  const cfg = { ...DEFAULT_TRANSITION_OPTIONS, ...options };
+  const nodes = createMarkup(doc);
+  root.append(nodes.root);
+
+  let active = null; // laufende Timeline
+  // Ruhezustand: voll deckend, unsichtbar.
+  drawCovered(nodes.clipPath, cfg.geometry.covered, stage(win));
+  gsap.set(nodes.root, { autoAlpha: 0, pointerEvents: 'none' });
+
+  /**
+   * Übergang fahren. `onReveal` feuert am Start (Zeitpunkt des DOM-Swaps),
+   * `onComplete`/Promise am Ende. `snapshot` (optional) = Schnappschuss der
+   * ausgehenden Seite für `.page-transition__source-snapshot`.
+   */
+  function transition({ onReveal, onContentReveal, onComplete, snapshot } = {}) {
+    active?.kill();
+    const m = stage(win);
+    const shape = { ...cfg.geometry.covered };
+
+    if (snapshot) nodes.snapshot.replaceChildren(snapshot);
+    gsap.set(nodes.nextContent, { [TRANSITION_VARS.blur]: '0px', [TRANSITION_VARS.brightness]: 1 });
+    drawCovered(nodes.clipPath, shape, m);
+    gsap.set(nodes.root, { autoAlpha: 1, pointerEvents: 'auto' });
+
+    const t = cfg.timeline;
+    return new Promise((resolve) => {
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        onComplete: () => {
+          gsap.set(nodes.root, { autoAlpha: 0, pointerEvents: 'none' });
+          drawCovered(nodes.clipPath, cfg.geometry.covered, stage(win));
+          nodes.snapshot.replaceChildren();
+          onComplete?.();
+          resolve();
+        },
+      });
+      const redraw = () => drawMorph(nodes.clipPath, shape, m);
+      tl.call(() => onReveal?.(), undefined, 0)
+        .to(nodes.nextContent, { [TRANSITION_VARS.brightness]: t.dim.brightness, duration: t.dim.duration, ease: t.dim.ease }, t.dim.at)
+        .to(shape, { ...cfg.geometry[t.morphIn.to], duration: t.morphIn.duration, ease: EASES[t.morphIn.ease], onUpdate: redraw }, t.morphIn.at)
+        .to(shape, { ...cfg.geometry[t.morphOut.to], duration: t.morphOut.duration, ease: EASES[t.morphOut.ease], onUpdate: redraw }, t.morphOut.at)
+        .call(() => onContentReveal?.(), undefined, t.contentRevealAt)
+        .to(nodes.root, { autoAlpha: 0, duration: t.overlayFadeOut.duration, ease: t.overlayFadeOut.ease }, t.overlayFadeOut.at);
+      active = tl;
+    });
+  }
+
+  return {
+    transition,
+    destroy() {
+      active?.kill();
+      active = null;
+      gsap.killTweensOf([nodes.root, nodes.nextContent]);
+      nodes.root.remove();
+    },
+  };
+}

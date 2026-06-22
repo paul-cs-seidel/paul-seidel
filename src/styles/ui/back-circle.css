@@ -1,0 +1,43 @@
+/* UI — Back-Circle-Button — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+
+.back-circle-control {
+  appearance: none;
+  color: #fff;
+  cursor: pointer;
+  pointer-events: auto;
+  transform-origin: 50%;
+  background: #0b0b0a;
+  border: 0;
+  border-radius: 999px;
+  place-items: center;
+  width: clamp(38px, 3.1vw, 46px);
+  height: clamp(38px, 3.1vw, 46px);
+  padding: 0;
+  text-decoration: none;
+  transition:
+    background 0.18s,
+    transform 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: inline-grid;
+  position: relative;
+}
+
+.back-circle-control svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  stroke-width: 2.4px;
+  width: 58%;
+  height: 58%;
+  display: block;
+}
+
+.back-circle-control:hover {
+  background: #000;
+  transform: scale(0.94);
+}
+
+.back-circle-control:focus-visible {
+  outline-offset: 4px;
+  outline: 2px solid #0b0b0a;
+}

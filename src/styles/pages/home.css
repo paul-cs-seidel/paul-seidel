@@ -1,0 +1,133 @@
+/* Seite — Home (Hero, Profil, Meta, WebGL-BG) — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+
+.webgl-background {
+  z-index: 0;
+  overscroll-behavior: none;
+  touch-action: none;
+  background: #fff;
+  position: fixed;
+  inset: 0;
+}
+
+.webgl-background canvas {
+  touch-action: none;
+  display: block;
+}
+
+.experience-page--home {
+  color: #0b0b0a;
+  background: 0 0;
+}
+
+.hero-section {
+  align-items: start;
+}
+
+.home-profile {
+  color: #0b0b0a;
+  align-self: start;
+  width: min(max(360px, 24vw), 100vw - clamp(28px, 5.2vw, 88px));
+}
+
+.home-profile p {
+  color: #0b0b0a8a;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+  font-size: max(12px, min(0.8vw, 7.8px + 0.28vw));
+  font-weight: 500;
+  line-height: 1;
+}
+
+.home-profile h1 {
+  letter-spacing: 0;
+  margin: 0;
+  font-size: max(24px, 2.8vw);
+  font-weight: 500;
+  line-height: 0.98;
+}
+
+.home-profile dl {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 1.6vw, 20px);
+  margin: clamp(18px, 3vh, 28px) 0 0;
+  display: grid;
+}
+
+.home-profile div {
+  border-top: 1px solid #0b0b0a29;
+  padding-top: 10px;
+}
+
+.home-profile dt,
+.home-profile dd {
+  letter-spacing: 0.018em;
+  text-transform: uppercase;
+  margin: 0;
+  font-size: max(12px, min(0.8vw, 7.8px + 0.28vw));
+  line-height: 1.25;
+}
+
+.home-profile dt {
+  color: #0b0b0a6b;
+}
+
+.home-profile dd {
+  color: #0b0b0a;
+  margin-top: 7px;
+}
+
+.home-meta {
+  color: #0b0b0a;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-self: end;
+  gap: clamp(12px, 2vw, 28px);
+  width: min(720px, 100vw - clamp(28px, 5.2vw, 88px));
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.home-meta div {
+  border-top: 1px solid #0b0b0a29;
+  padding-top: 10px;
+}
+
+.home-meta dt,
+.home-meta dd {
+  letter-spacing: 0.018em;
+  text-transform: uppercase;
+  margin: 0;
+  font-size: max(12px, min(0.8vw, 7.8px + 0.28vw));
+  line-height: 1.25;
+}
+
+.home-meta dt {
+  color: #0b0b0a6b;
+}
+
+.home-meta dd {
+  color: #0b0b0a;
+  margin-top: 7px;
+}
+
+@media (max-width: 620px) {
+  .home-meta {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    width: min(280px, 100%);
+  }
+  .home-meta div {
+    border-top: 0;
+    padding-top: 0;
+  }
+  .home-meta dt {
+    font-size: max(10px, min(2.94vw, 6.5px + 1.029vw));
+    line-height: 1;
+  }
+  .home-meta dd {
+    margin-top: 5px;
+    font-size: max(11px, min(3.235vw, 7.15px + 1.13225vw));
+    line-height: 1.25;
+  }
+}

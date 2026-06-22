@@ -1,0 +1,18 @@
+/* Hiroto-Referenz — aufgeteiltes Stylesheet. Import-Reihenfolge = Original-Kaskade. */
+
+@import url('./tokens.css');
+@import url('./base.css');
+@import url('./motion.css');
+@import url('./layout.css');
+@import url('./ui/nav.css');
+@import url('./ui/cursor.css');
+@import url('./ui/preloader.css');
+@import url('./ui/back-circle.css');
+@import url('./ui/page-transition.css');
+@import url('./ui/split-text.css');
+@import url('./ui/language-toggle.css');
+@import url('./pages/home.css');
+@import url('./pages/projects.css');
+@import url('./pages/about.css');
+@import url('./pages/contact.css');
+

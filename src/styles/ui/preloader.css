@@ -1,0 +1,41 @@
+/* UI — Preloader — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+
+.preloader {
+  z-index: 20;
+  color: #ffffffeb;
+  transform-origin: bottom;
+  background: 0 0;
+  place-items: center;
+  padding: clamp(20px, 4vw, 45px);
+  display: grid;
+  position: fixed;
+  inset: 0;
+}
+
+.preloader__wave {
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: absolute;
+  inset: 0;
+}
+
+.preloader__inner {
+  z-index: 1;
+  place-items: center;
+  min-height: 1.4em;
+  display: grid;
+  position: relative;
+}
+
+.preloader__text {
+  color: #ffffffeb;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-size: clamp(12px, 1.35vw, 15px);
+  font-weight: 500;
+  line-height: 1;
+  display: inline-block;
+}

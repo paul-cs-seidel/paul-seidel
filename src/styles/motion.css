@@ -1,0 +1,32 @@
+/* Motion — @keyframes — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+
+@keyframes projectsZoomIn {
+  0% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes projectsImageZoomIn {
+  0% {
+    opacity: 0;
+    transform-origin: 0 100%;
+    transform: translate(-18vw, 18vh) scale(0.36);
+  }
+  to {
+    opacity: 1;
+    transform-origin: 50%;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes projectsGalleryLoop {
+  0% {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-50%);
+  }
+}

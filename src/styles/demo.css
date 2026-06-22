@@ -1,0 +1,84 @@
+/*
+ * demo.css — NUR für die lauffähige Demo (nicht Teil der 1:1-Original-Styles).
+ * Header-Leiste (Back-Button + EN/JA), Zentrier-Absicherung, Hover-Readout,
+ * sowie kleine Helfer für Seitenübergang und FLIP-Zoom.
+ */
+
+/* Back-Button + Sprachumschalter nebeneinander in der Kopfzeile. */
+.demo-header-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(12px, 1.4vw, 18px);
+}
+
+/* Inhalt von About/Contact vertikal mittig (place-self greift in der 1fr-Zeile). */
+.about-page__content,
+.contact-page__content {
+  place-self: center;
+}
+
+.back-circle-control svg {
+  width: 52%;
+  height: 52%;
+}
+
+/* Seitenübergang: Snapshot der alten Seite auf weißem Grund → sauberer Wisch. */
+.page-transition__source-snapshot {
+  background: #fff;
+}
+
+/* Hover-Readout unten links (Kategorie / Rolle + Titel des gehoverten Projekts). */
+.demo-project-readout {
+  position: fixed;
+  left: var(--ui-edge-x, clamp(20px, 4vw, 64px));
+  bottom: var(--ui-gutter-y, clamp(20px, 3vw, 44px));
+  z-index: 6;
+  max-width: 70vw;
+  color: #0b0b0a;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+.demo-project-readout.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.demo-project-readout span {
+  display: block;
+  margin-bottom: 7px;
+  color: #0b0b0a78;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  font-size: max(11px, min(0.8vw, 7px + 0.28vw));
+  line-height: 1.2;
+}
+.demo-project-readout strong {
+  display: block;
+  font-weight: 500;
+  font-size: max(20px, min(2vw, 16px + 0.7vw));
+  line-height: 1;
+}
+
+/* `.projects-zoom { display:grid }` überschreibt sonst das [hidden]-Attribut →
+ * spezifischer Selektor blendet die Zoom-Fläche im Ruhezustand korrekt aus. */
+.projects-zoom[hidden] {
+  display: none;
+}
+
+/* Nav während des FLIP-Zooms ausblenden (die Zoom-Ansicht deckt alles ab). */
+.is-zoom-open .site-nav {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Detail-Bild im Zoom: grauer Platzhalter-Hintergrund würde während des
+ * FLIP-Morphs als Kasten aufblitzen → transparent, nur das Bild morpht. */
+.projects-zoom__image {
+  background: transparent;
+}
+.projects-zoom__link[data-zoom-link] {
+  gap: 0.5em;
+}

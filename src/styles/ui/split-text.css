@@ -1,0 +1,43 @@
+/* UI — Split-Text / Reveal — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+
+[data-text-reveal],
+[data-text-reveal-heading],
+[data-text-reveal-kicker],
+.page-shell__intro > p,
+.page-shell__intro > h1,
+.about-language-toggle > button,
+.about-page__body,
+.contact-page__links,
+.projects-gridzoom__intro > p,
+.projects-gridzoom__intro > h1,
+.split-heading__line {
+  will-change: opacity, transform;
+}
+
+.split-heading__line {
+  display: block;
+}
+
+.split-text {
+  perspective: 900px;
+}
+
+.split-text p,
+.split-text h1 {
+  overflow: hidden;
+}
+
+.split-text__word {
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.split-text__char,
+.split-text__eyebrow-char {
+  will-change: transform, opacity;
+  display: inline-block;
+}
+
+.split-text__space {
+  display: inline;
+}

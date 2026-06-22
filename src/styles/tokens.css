@@ -1,0 +1,12 @@
+/* Design-Tokens (:root) — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+
+:root {
+  --background: #fff;
+  --foreground: #10100f;
+  --muted: #10100fad;
+  --line: #10100f24;
+  --accent: #8f6200;
+  --ui-gutter-x: clamp(14px, 2.6vw, 44px);
+  --ui-gutter-y: clamp(18px, 2.8vw, 40px);
+  --ui-edge-x: var(--ui-gutter-x);
+}

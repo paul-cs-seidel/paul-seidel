@@ -1,0 +1,183 @@
+<!doctype html>
+<!--
+  Saubere Demo der dekomponierten Hiroto-Referenz — nutzt AUSSCHLIESSLICH unsere
+  neuen Module (./effects/*) + die aufgeteilte CSS (./styles/main.css). GSAP wird
+  als echte npm-Library über die Import-Map aufgelöst (node_modules), NICHT aus
+  den minifizierten site/_next-Chunks. Die 3D-Hero ist bewusst eine helle Fläche.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio — Paul Seidel</title>
+    <link rel="stylesheet" href="https://use.typekit.net/nof0axs.css" />
+    <link rel="stylesheet" href="./styles/main.css" />
+    <link rel="stylesheet" href="./styles/demo.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "gsap": "/node_modules/gsap/index.js",
+          "gsap/CustomEase": "/node_modules/gsap/CustomEase.js",
+          "gsap/SplitText": "/node_modules/gsap/SplitText.js",
+          "gsap/ScrambleTextPlugin": "/node_modules/gsap/ScrambleTextPlugin.js",
+          "gsap/Flip": "/node_modules/gsap/Flip.js",
+          "split-type": "/node_modules/split-type/dist/index.js"
+        }
+      }
+    </script>
+    <script type="module" src="./main.js"></script>
+    <script src="effects/webgl-effect/webgl-oi.js"></script>
+  </head>
+  <body>
+    <div class="persistent-experience" data-route="home">
+      <div class="webgl-background" aria-hidden="true"></div>
+
+      <!-- Home -->
+      <main class="experience-page experience-page--home" data-route-panel="home">
+        <section class="hero-section page-shell" aria-label="Hero">
+          <div class="home-profile">
+            <p data-text-reveal-kicker data-en="APPLICATION DEVELOPMENT · TRAINEE" data-de="FACHINFORMATIKER ANWENDUNGSENTWICKLUNG">APPLICATION DEVELOPMENT · TRAINEE</p>
+            <h1 data-text-reveal-heading data-en="PAUL SEIDEL" data-de="PAUL SEIDEL">PAUL SEIDEL</h1>
+          </div>
+          <dl class="home-meta" aria-label="Home details">
+            <div>
+              <dt data-en="Base" data-de="Base">Base</dt>
+              <dd data-en="Germany, Kassel" data-de="Deutschland, Kassel">Germany, Kassel</dd>
+            </div>
+            <div>
+              <dt data-en="Focus" data-de="Focus">Focus</dt>
+              <dd data-en="UI/UX · CREATIVE" data-de="UI/UX · CREATIVE">UI/UX · CREATIVE</dd>
+            </div>
+            <div>
+              <dt data-en="Index" data-de="Index">Index</dt>
+              <dd data-en="Portfolio 2026" data-de="PORTFOLIO 2026">Portfolio 2026</dd>
+            </div>
+          </dl>
+        </section>
+      </main>
+
+      <!-- Projects -->
+      <main class="experience-page experience-page--projects" data-route-panel="projects" hidden>
+        <div class="projects-page">
+          <div class="projects-gridzoom">
+            <div class="projects-gridzoom__header">
+              <div class="demo-header-controls">
+                <button class="back-circle-control" type="button" data-back aria-label="Back to home">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" /></svg>
+                </button>
+                <div class="projects-language-toggle" aria-label="Language">
+                  <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                  <button type="button" data-lang="de" aria-pressed="false">DE</button>
+                </div>
+              </div>
+            </div>
+            <div class="projects-gridzoom__intro">
+              <p data-en="My Projects" data-de="Meine Projekte">My Projects</p>
+              <h1 data-text-reveal-heading data-en="Eight projects across library, interface, e-commerce and 3D - from the first study site to this portfolio." data-de="Acht Projekte zwischen Library, Interface, E-Commerce und 3D - von der ersten Lernseite bis zu diesem Portfolio.">
+                Eight projects across library, interface, e-commerce and 3D - from the first study site to this portfolio.
+              </h1>
+            </div>
+            <!-- projects-gallery baut die Marquee hier hinein -->
+            <div class="projects-gl-gallery" data-gallery-root></div>
+          </div>
+        </div>
+      </main>
+
+      <!-- About -->
+      <main class="experience-page experience-page--about" data-route-panel="about" hidden>
+        <div class="home-transition-page">
+          <div class="about-page">
+            <div class="page-shell">
+              <div class="page-shell__header">
+                <div class="demo-header-controls">
+                  <button class="back-circle-control" type="button" data-back aria-label="Back to home">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" /></svg>
+                  </button>
+                  <div class="about-language-toggle" aria-label="Language">
+                    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                    <button type="button" data-lang="de" aria-pressed="false">DE</button>
+                  </div>
+                </div>
+              </div>
+              <div class="about-page__content">
+                <div class="page-shell__intro">
+                  <p data-en="About" data-de="Über Mich">About</p>
+                  <h1 data-text-reveal-heading data-en="Creativity begins when you do something differently." data-de="Kreativität beginnt, wenn du etwas anders machst.">
+                    Creativity begins when you do something differently.
+                  </h1>
+                </div>
+                <div class="about-page__body">
+                  <p data-en="A thought that grows into an idea, that turns into a project, that helps people. That is what drives me. I love shaping projects and making them real. Projects that can genuinely help people. Projects that are simple and intuitive to use. A single thought can sometimes do so much, and I want to be the one who brings that thought into the world." data-de="Ein Gedanke der zu einer Idee heranwächst, die zu einem Projekt wird, das Menschen hilft. Das ist es, was mich antreibt. Ich liebe es Projekte zu gestalten und umzusetzen. Projekte welche Menschen wirklich helfen können. Projekte die einfach und intuitiv benutzt werden können. Ein Gedanke kann manchmal so viel bewirken und ich möchte derjenige sein, der diesen Gedanken in die Welt bringt.">
+                    A thought that grows into an idea, that turns into a project, that helps people. That is what drives me. I love shaping projects and making them real. Projects that can genuinely help people. Projects that are simple and intuitive to use. A single thought can sometimes do so much, and I want to be the one who brings that thought into the world.
+                  </p>
+                </div>
+                <dl class="about-page__meta">
+                  <div>
+                    <dt data-en="Name" data-de="Name">Name</dt>
+                    <dd data-en="Paul Seidel" data-de="Paul Seidel">Paul Seidel</dd>
+                  </div>
+                  <div>
+                    <dt data-en="Role" data-de="Rolle">Role</dt>
+                    <dd data-en="Application Development" data-de="Fachinformatiker Anwendungsentwicklung">Application Development</dd>
+                  </div>
+                  <div>
+                    <dt data-en="Contact" data-de="Kontakt">Contact</dt>
+                    <dd class="about-page__contact-links">
+                      <a href="mailto:info@paul-seidel.com" data-cursor-split-label="Let´s Talk">info@paul-seidel.com</a>
+                      <a href="#" data-cursor-split-label="Open">LinkedIn</a>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Contact -->
+      <main class="experience-page experience-page--contact" data-route-panel="contact" hidden>
+        <div class="home-transition-page">
+          <div class="contact-page">
+            <div class="page-shell">
+              <div class="page-shell__header">
+                <div class="demo-header-controls">
+                  <button class="back-circle-control" type="button" data-back aria-label="Back to home">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" /></svg>
+                  </button>
+                  <div class="about-language-toggle" aria-label="Language">
+                    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                    <button type="button" data-lang="de" aria-pressed="false">DE</button>
+                  </div>
+                </div>
+              </div>
+              <div class="contact-page__content">
+                <div class="page-shell__intro">
+                  <p data-en="Contact" data-de="Kontakt">Contact</p>
+                  <h1 data-text-reveal-heading data-en="Get in touch." data-de="Schreib mir">Get in touch.</h1>
+                  <a class="Atitle MW" href="${links.mail}" aria-label="Get in touch" data-tt="let's talk" data-w="1">
+                    <div class="cCover"></div>
+                    <div class="Oi Oi-tt" data-temp="foot" data-foot="1"${white} data-length="3" data-w="6" data-l="-0.022" data-m="6" data-text="Get in touch." data-oi="10" style="visibility: visible;"></div>
+                    <h2 class="ttj Oiel">SCHREIB MIR</h2>
+                  </a>
+                </div>
+                <div class="contact-page__body">
+                  <div class="contact-page__links">
+                    <a href="mailto:info@paul-seidel.com" data-cursor-split-label="Mail">info@paul-seidel.com</a>
+                    <a href="#" data-cursor-split-label="Open">LinkedIn</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a aria-current="page" data-route="home" href="#home" data-en="Home" data-de="Startseite">Home</a>
+        <a data-route="projects" href="#projects" data-en="Projects" data-de="Projekte">Projects</a>
+        <a data-route="about" href="#about" data-en="About" data-de="Über Mich">About</a>
+        <a data-route="contact" href="#contact" data-en="Contact" data-de="Kontakt">Contact</a>
+      </nav>
+    </div>
+  </body>
+</html>

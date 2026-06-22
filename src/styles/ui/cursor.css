@@ -1,0 +1,119 @@
+/* UI — Custom-Cursor (mouse-stalker + sticker-preview) — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+
+.mouse-stalker {
+  z-index: 160;
+  color: #0b0b0a;
+  pointer-events: none;
+  transform-origin: 50%;
+  will-change: transform, width, height, opacity;
+  width: 18px;
+  height: 18px;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.mouse-stalker__svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.mouse-stalker__shape {
+  fill: #0b0b0a;
+  stroke: #0b0b0a;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+}
+
+.mouse-stalker__label {
+  fill: #fff;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  font-size: max(10px, min(0.667vw, 6.5px + 0.23345vw));
+  font-weight: 700;
+}
+
+.mouse-stalker__arrow {
+  fill: none;
+  stroke: #fff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.4px;
+  vector-effect: non-scaling-stroke;
+}
+
+.mouse {
+  --mouse-dark: #0b0b0a;
+  --mouse-light: #fff;
+  z-index: 162;
+  pointer-events: none;
+  will-change: transform;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.mouse_el {
+  white-space: nowrap;
+  overflow: hidden;
+  position: absolute;
+  top: -8px;
+  left: 20px;
+}
+
+.mouse_el .Awrite {
+  white-space: nowrap;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.mouse_el .Awrite-inv {
+  color: var(--mouse-light);
+  letter-spacing: 0.035em;
+  background: var(--mouse-dark);
+  align-items: baseline;
+  padding: 2px 4px 1px;
+  font-size: max(10px, min(0.667vw, 6.5px + 0.23345vw));
+  font-weight: 700;
+  line-height: 1.1;
+  display: inline-flex;
+}
+
+.mouse_el .Awrite-w {
+  --mouse-dark: #fff;
+  --mouse-light: #0b0b0a;
+}
+
+.mouse_el .word {
+  display: inline-flex;
+}
+
+.mouse_el .char {
+  pointer-events: none;
+  position: relative;
+  display: inline-block;
+}
+
+.mouse_el .char .n {
+  color: var(--mouse-light);
+  opacity: 0;
+  z-index: 2;
+  position: relative;
+}
+
+.mouse_el .char .f {
+  color: var(--mouse-light);
+  opacity: 0;
+  z-index: 1;
+  background: var(--mouse-dark);
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: left center;
+}
+

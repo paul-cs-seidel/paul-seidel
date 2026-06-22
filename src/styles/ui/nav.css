@@ -1,0 +1,67 @@
+/* UI — Top-Navigation — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+
+.persistent-experience[data-transitioning='true'] .site-nav {
+  pointer-events: none;
+}
+
+.site-nav {
+  top: var(--ui-gutter-y);
+  right: var(--ui-edge-x);
+  z-index: 80;
+  pointer-events: auto;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  display: flex;
+  position: fixed;
+}
+
+.site-nav a,
+.site-nav button {
+  appearance: none;
+  color: #0b0b0a75;
+  cursor: pointer;
+  letter-spacing: 0.045em;
+  text-align: right;
+  text-transform: uppercase;
+  background: 0 0;
+  border: 0;
+  min-width: 74px;
+  padding: 2px 0 3px;
+  font-size: max(12px, min(0.8vw, 7.8px + 0.28vw));
+  font-weight: 400;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    color 0.18s,
+    border-color 0.18s,
+    opacity 0.18s,
+    transform 0.18s;
+}
+
+.site-nav a:hover,
+.site-nav button:hover {
+  color: #0b0b0a;
+  transform: translate(-2px);
+}
+
+.site-nav a[aria-current='page'],
+.site-nav button[aria-current='page'] {
+  color: #0b0b0a;
+}
+
+.brand-home-link {
+  color: inherit;
+  cursor: pointer;
+  pointer-events: auto;
+  font-size: max(13px, min(1vw, 9.75px + 0.35vw));
+  font-weight: 500;
+  line-height: 0.95;
+  text-decoration: none;
+  transition: color 0.18s;
+  display: inline-block;
+}
+
+.brand-home-link:hover {
+  color: #0b0b0a;
+}
