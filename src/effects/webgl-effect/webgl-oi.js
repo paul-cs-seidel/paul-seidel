@@ -8,9 +8,10 @@ const vertexShader = `
   void main() {
     vUv = uv;
     vec3 pos = position;
-    // Subtile Wellenbewegung nur bei Hover
     if(uHover > 0.0) {
-        pos.x += sin(pos.y * 8.0 + uTime * 2.0) * (0.03 * uHover);
+        // Der Paul-Seidel-Liquid-Effekt
+        pos.x += sin(pos.y * 12.0 + uTime * 2.5) * (0.04 * uHover);
+        pos.y += cos(pos.x * 8.0 + uTime * 1.5) * (0.02 * uHover);
     }
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
   }
@@ -21,6 +22,7 @@ const fragmentShader = `
   uniform sampler2D uMap;
   uniform float uOpacity;
   
+  // MSDF Median Funktion für scharfe Kanten
   float median(float r, float g, float b) {
     return max(min(r, g), min(max(r, g), b));
   }
@@ -34,8 +36,8 @@ const fragmentShader = `
 `;
 
 export function mount(container) {
-    const target = container.querySelector('.Oi');
-    if (!target) return;
+    const el = container.querySelector('.Oi');
+    if (!el) return;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -44,15 +46,22 @@ export function mount(container) {
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.domElement.style.cssText = 'position:fixed; top:0; left:0; pointer-events:none; z-index:1000;';
+
+    // Canvas Styling: Fixiert über dem UI
+    renderer.domElement.style.position = 'fixed';
+    renderer.domElement.style.top = '0';
+    renderer.domElement.style.left = '0';
+    renderer.domElement.style.pointerEvents = 'none';
+    renderer.domElement.style.zIndex = '9999';
     document.body.appendChild(renderer.domElement);
 
-    // Textur laden (Vite nutzt /public als Root, also kein "public/" im Pfad)
-    const tex = new THREE.TextureLoader().load('/assets/fonts/PPNeueMontreal-Medium.png');
+    // Lade deine PPNeueMontreal-Medium.png
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load('./assets/fonts/PPNeueMontreal-Medium.png');
 
     const material = new THREE.ShaderMaterial({
         uniforms: {
-            uMap: { value: tex },
+            uMap: { value: texture },
             uTime: { value: 0 },
             uOpacity: { value: 0 },
             uHover: { value: 0 }
@@ -62,36 +71,46 @@ export function mount(container) {
         transparent: true
     });
 
-    // Plane erstellen (Größe des SCHREIB MIR Texts)
-    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 0.6), material);
+    // Plane erstellen, die grob die Proportionen des Wortes hat
+    const geometry = new THREE.PlaneGeometry(3, 0.8);
+    const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
-    const link = target.closest('a');
-    link.addEventListener('mouseenter', () => {
-        gsap.to(material.uniforms.uOpacity, { value: 1, duration: 0.4 });
-        gsap.to(material.uniforms.uHover, { value: 1, duration: 0.8, ease: "power2.out" });
-        target.style.opacity = "0"; // Statischen Text verstecken
-    });
+    const parentLink = el.closest('a');
+    if (parentLink) {
+        parentLink.addEventListener('mouseenter', () => {
+            gsap.to(material.uniforms.uOpacity, { value: 1, duration: 0.3 });
+            gsap.to(material.uniforms.uHover, { value: 1, duration: 0.8, ease: "power2.out" });
+            el.style.opacity = "0"; // Original verstecken
+        });
+        parentLink.addEventListener('mouseleave', () => {
+            gsap.to(material.uniforms.uOpacity, { value: 0, duration: 0.3 });
+            gsap.to(material.uniforms.uHover, { value: 0, duration: 0.8 });
+            el.style.opacity = "1"; // Original zeigen
+        });
+    }
 
-    link.addEventListener('mouseleave', () => {
-        gsap.to(material.uniforms.uOpacity, { value: 0, duration: 0.4 });
-        gsap.to(material.uniforms.uHover, { value: 0, duration: 0.8 });
-        target.style.opacity = "1";
-    });
+    function animate(time) {
+        material.uniforms.uTime.value = time * 0.001;
 
-    function animate() {
-        material.uniforms.uTime.value += 0.05;
-
-        // Position des Mesh mit dem DOM Element synchronisieren
-        const rect = target.getBoundingClientRect();
+        // Mesh an DOM Element Position binden
+        const rect = el.getBoundingClientRect();
         const x = (rect.left + rect.width / 2) / window.innerWidth * 2 - 1;
         const y = -(rect.top + rect.height / 2) / window.innerHeight * 2 + 1;
 
+        // Faktor für das Alignment (hängt von Kamera-Z ab)
         mesh.position.x = x * 2.8;
-        mesh.position.y = y * 1.8;
+        mesh.position.y = y * 2.1;
 
         renderer.render(scene, camera);
         requestAnimationFrame(animate);
     }
-    animate();
+    requestAnimationFrame(animate);
+
+    return {
+        destroy: () => {
+            renderer.dispose();
+            document.body.removeChild(renderer.domElement);
+        }
+    };
 }

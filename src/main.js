@@ -18,7 +18,7 @@ import { mount as mountTransition } from './effects/page-transition/page-transit
 import { mount as mountTextReveal } from './effects/text-reveal/text-reveal.js';
 import { mount as mountGallery } from './effects/projects-gallery/projects-gallery.js';
 import { mount as mountFractalEffect } from './effects/fractalEffect/fractalEffect.js';
-import { mountOiEffect } from './effects/webgl-effect/webgl-oi.js';
+import { mount as mountOiEffect } from './effects/webgl-effect/webgl-oi.js';
 
 
 gsap.registerPlugin(Flip);
@@ -108,8 +108,10 @@ async function navigate(route) {
   }
   if (route === 'contact') {
     const contactPanel = panels.get('contact');
-    mountOiEffect(contactPanel);
-    document.addEventListener('DOMContentLoaded', () => {mountOiEffect();});
+    // Kleiner Timeout, damit das Panel sicher sichtbar ist
+    setTimeout(() => {
+      mountOiEffect(contactPanel);
+    }, 400);
   }
   busy = false;
 }
