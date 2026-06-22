@@ -1,4 +1,10 @@
 /* Seite — Home (Hero, Profil, Meta, WebGL-BG) — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+.hero-section {
+  align-items: start;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
 .webgl-background {
   z-index: 0;
