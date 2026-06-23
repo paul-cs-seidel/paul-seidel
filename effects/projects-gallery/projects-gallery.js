@@ -155,20 +155,14 @@ export function mount(root, options = {}) {
   const startTimer = gsap.delayedCall(cfg.speed.startDelay, ramp);
   gsap.ticker.add(tick);
 
-  // Karten-Enter: sichtbare Karten ausblenden, bei „entered" gestaffelt zeigen.
-  const viewport = win.innerWidth;
-  const cards = [...track.querySelectorAll(`.${GALLERY_CLASSES.card}`)].filter((card) => {
-    const rect = card.getBoundingClientRect();
-    return rect.right > -0.1 * viewport && rect.left < 1.1 * viewport;
-  });
+  // Alle Karten (alle 3 Sets) fuer das manuelle Enter/Reset.
+  const allCards = [...track.querySelectorAll(`.${GALLERY_CLASSES.card}`)];
   let enterTl = null;
-  if (cards.length > 0) {
-    gsap.set(cards, { ...cfg.enter.from, force3D: true });
-    const play = () => {
-      enterTl = gsap.timeline().to(cards, { ...cfg.enter.to });
-    };
-    if (doc.documentElement.classList.contains('is-entered')) play();
-    else win.addEventListener(cfg.triggerEvent, play, { once: true, signal });
+
+  // Karten sofort in Ausgangszustand (versteckt) — enterCards() wird
+  // vom Aufrufer (main.js) in onContentReveal manuell getriggert.
+  if (allCards.length > 0) {
+    gsap.set(allCards, { ...cfg.enter.from, force3D: true });
   }
 
   return {
@@ -176,6 +170,22 @@ export function mount(root, options = {}) {
     freeze(frozen) {
       state.isRouteFrozen = Boolean(frozen);
       ramp();
+    },
+    /** Karten-Enter-Animation manuell starten (nach Seitenwechsel). */
+    enterCards() {
+      enterTl?.kill();
+      if (allCards.length > 0) {
+        gsap.set(allCards, { ...cfg.enter.from, force3D: true });
+        enterTl = gsap.timeline().to(allCards, { ...cfg.enter.to });
+      }
+    },
+    /** Karten sofort zuruecksetzen (vor dem naechsten Enter). */
+    resetCards() {
+      enterTl?.kill();
+      enterTl = null;
+      if (allCards.length > 0) {
+        gsap.set(allCards, { ...cfg.enter.from, force3D: true });
+      }
     },
     state,
     destroy() {

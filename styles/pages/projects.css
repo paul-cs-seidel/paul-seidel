@@ -695,3 +695,32 @@
     aspect-ratio: 16/10;
   }
 }
+
+/* Language-Toggle im Zoom-Header */
+.projects-zoom__lang {
+  pointer-events: auto;
+  gap: 8px;
+  display: inline-flex;
+}
+
+.projects-zoom__lang button {
+  appearance: none;
+  color: #0b0b0a6b;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  background: 0 0;
+  border: 0;
+  padding: 0;
+  transition: color 0.18s, transform 0.18s;
+}
+
+.projects-zoom__lang button:hover {
+  color: #0b0b0a;
+  transform: translateY(-1px);
+}
+
+.projects-zoom__lang button[aria-pressed='true'] {
+  color: #0b0b0a;
+}

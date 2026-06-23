@@ -2,8 +2,7 @@
 <!--
   Saubere Demo der dekomponierten Hiroto-Referenz — nutzt AUSSCHLIESSLICH unsere
   neuen Module (./effects/*) + die aufgeteilte CSS (./styles/main.css). GSAP wird
-  als echte npm-Library über die Import-Map aufgelöst (node_modules), NICHT aus
-  den minifizierten site/_next-Chunks. Die 3D-Hero ist bewusst eine helle Fläche.
+  von Vite als echte npm-Library aufgelöst. Die 3D-Hero ist bewusst eine helle Fläche.
 -->
 <html lang="en">
   <head>
@@ -11,21 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Portfolio — Paul Seidel</title>
     <link rel="stylesheet" href="https://use.typekit.net/nof0axs.css" />
-    <link rel="stylesheet" href="./styles/main.css" />
-    <link rel="stylesheet" href="./styles/demo.css" />
-    <script type="importmap">
-      {
-        "imports": {
-          "gsap": "/vendor/gsap/index.js",
-          "gsap/CustomEase": "/vendor/gsap/CustomEase.js",
-          "gsap/SplitText": "/vendor/gsap/SplitText.js",
-          "gsap/ScrambleTextPlugin": "/vendor/gsap/ScrambleTextPlugin.js",
-          "gsap/Flip": "/vendor/gsap/Flip.js",
-          "split-type": "/vendor/split-type/dist/index.js"
-        }
-      }
-    </script>
-    <script type="module" src="./main.js"></script>
+    <link rel="stylesheet" href="/styles/main.css" />
+    <link rel="stylesheet" href="/styles/demo.css" />
+    <script type="module" src="/main.js"></script>
   </head>
   <body>
     <div class="persistent-experience" data-route="home">
