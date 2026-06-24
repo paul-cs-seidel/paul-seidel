@@ -121,6 +121,41 @@ export function mount(root, options = {}) {
     state.wheelVelocity = clamp(state.wheelVelocity + delta * cfg.scroll.wheelFactor, -cfg.scroll.wheelClamp, cfg.scroll.wheelClamp);
   };
 
+  // ── Touch-Support (Swipe horizontal) ──────────────────────────────────────
+  let touchStartX = 0;
+  let touchLastX  = 0;
+  let touchLastT  = 0;
+
+  const onTouchStart = (event) => {
+    if (state.isRouteFrozen) return;
+    const t = event.touches[0];
+    touchStartX = t.clientX;
+    touchLastX  = t.clientX;
+    touchLastT  = performance.now();
+    state.isPointerPaused = true;
+    ramp();
+  };
+
+  const onTouchMove = (event) => {
+    if (state.isRouteFrozen) return;
+    const t     = event.touches[0];
+    const now   = performance.now();
+    const dx    = touchLastX - t.clientX;
+    const dt    = Math.max(1, now - touchLastT);
+    const speed = dx / dt * 1000;
+    gsap.killTweensOf(state, 'wheelVelocity');
+    state.wheelVelocity = clamp(speed * cfg.scroll.wheelFactor * 0.6, -cfg.scroll.wheelClamp, cfg.scroll.wheelClamp);
+    touchLastX = t.clientX;
+    touchLastT = now;
+    const totalDX = Math.abs(t.clientX - touchStartX);
+    if (totalDX > 8) event.preventDefault();
+  };
+
+  const onTouchEnd = () => {
+    state.isPointerPaused = false;
+    ramp();
+  };
+
   const projectIdOf = (item) => item.querySelector('[data-project-id]')?.dataset.projectId ?? null;
 
   const onPointerOver = (event) => {
@@ -148,6 +183,10 @@ export function mount(root, options = {}) {
   resizeObserver.observe(firstSet);
   win.addEventListener('resize', measure, { signal });
   root.addEventListener('wheel', onWheel, { passive: true, signal });
+  root.addEventListener('touchstart', onTouchStart, { passive: true, signal });
+  root.addEventListener('touchmove', onTouchMove, { passive: false, signal });
+  root.addEventListener('touchend', onTouchEnd, { signal });
+  root.addEventListener('touchcancel', onTouchEnd, { signal });
   root.addEventListener('pointerover', onPointerOver, { signal });
   root.addEventListener('pointerout', onPointerOut, { signal });
   root.addEventListener('click', onClick, { signal });

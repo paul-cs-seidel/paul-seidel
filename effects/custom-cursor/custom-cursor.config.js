@@ -30,12 +30,14 @@ export const CURSOR_CLASSES = Object.freeze({
 /** Worauf der Stalker reagiert: hover-bare Elemente mit Label-Datenattribut. */
 export const CURSOR_SELECTORS = Object.freeze({
   trigger: '[data-cursor-stalker-label]:not([aria-disabled="true"])',
+  // Arrow-only: nur der animierte Pfeil-Cursor erscheint, kein Label-Text.
+  arrowOnlyTrigger: '[data-cursor-arrow-only]:not([aria-disabled="true"])',
   // Writing-Cursor (wie bei den Projekten) nur dort, wo er hingehoert: die
   // Bild-Flip-Items (.MW[data-tt] / explizit getaggt) und externe Links
   // (target="_blank"). Navbar, Back- und Sprach-Buttons bleiben aussen vor.
   // Label = data-cursor-split-label / data-tt / aria-label / Textinhalt.
   splitTrigger:
-    '[data-cursor-split-label]:not([aria-disabled="true"]), .MW[data-tt]:not([aria-disabled="true"]), a[target="_blank"]:not([aria-disabled="true"])',
+      '[data-cursor-split-label]:not([aria-disabled="true"]), [data-cursor-arrow-only]:not([aria-disabled="true"]), .MW[data-tt]:not([aria-disabled="true"]), a[target="_blank"]:not([aria-disabled="true"])',
   labelAttr: 'data-cursor-stalker-label',
   splitLabelAttr: 'data-cursor-split-label',
 });
@@ -79,7 +81,7 @@ export const DEFAULT_CURSOR_OPTIONS = Object.freeze({
     posOffset: Object.freeze({ x: -3, y: -1 }), // Feinversatz zum Zeiger (Z59564/59568)
     labelX: 15, // SVG-Text x (Z59648)
     labelDy: '0.14em', // SVG-Text dy (Z59650)
-    arrowPath: 'M58 11 L66 17 L58 23 M48 17 H65', // SVG-Pfeil (Z59656)
+    arrowPath: 'M11 23 L23 11 M12 11 H23 V22', // ↗ diagonal (Z59656 ersetzt)
   }),
 
   /**
@@ -89,15 +91,15 @@ export const DEFAULT_CURSOR_OPTIONS = Object.freeze({
   splitMouse: Object.freeze({
     follow: Object.freeze({ duration: 0.05, ease: 'none' }), // Hs.lightX/lightY
     offset: Object.freeze({ x: 20, y: -8 }), // .mouse_el { left: 2rem; top: -.8rem } auf px normalisiert
-    swapDelay: 300, // Hs.followIn wartet bei bestehendem Child 300ms
-    enterDelay: 6, // Hs.followIn wartet beim ersten Child 6ms
-    hide: Object.freeze({ width: 0, duration: 0.2, ease: 'power2.out' }), // Hs.followOut
+    swapDelay: 120,  // war 300 — schnellerer Wechsel bei bestehendem Child
+    enterDelay: 0,   // war 6 — sofortiger Start beim ersten Erscheinen
+    hide: Object.freeze({ width: 0, duration: 0.15, ease: 'power2.out' }), // war 0.2
     write: Object.freeze({
-      opacityDuration: 0.22,
-      charStagger: 0.05,
-      blockDuration: 0.16,
-      blockStagger: 0.05,
-      blockInnerStagger: 0.016,
+      opacityDuration: 0.14,  // war 0.22
+      charStagger: 0.03,      // war 0.05
+      blockDuration: 0.10,    // war 0.16
+      blockStagger: 0.03,     // war 0.05
+      blockInnerStagger: 0.010, // war 0.016
       ease: 'power4.inOut',
       fillers: 1,
       fillerText: ' ',

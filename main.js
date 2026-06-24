@@ -7,7 +7,6 @@ import { mount as mountTransition }    from './effects/page-transition/page-tran
 import { mount as mountTextReveal }    from './effects/text-reveal/text-reveal.js';
 import { mount as mountGallery }       from './effects/projects-gallery/projects-gallery.js';
 import { mount as mountFractalEffect } from './effects/fractalEffect/fractalEffect.js';
-import { mount as mountHeroGlass }    from './effects/fractalEffect/heroGlassEffect.js';
 
 gsap.registerPlugin(Flip);
 
@@ -38,10 +37,6 @@ mountPreloader(document.body);
 
 // Home-Text-Reveal — wartet intern auf signal-pole:entered (Ende Preloader).
 mountTextReveal(panels.get('home'));
-
-// Hero-Glas-Effekt auf der Home-Sektion
-const heroSection = panels.get('home').querySelector('.hero-section');
-if (heroSection) mountHeroGlass(heroSection);
 
 // ── Gallery VOR dem ersten Navigate aufbauen (Bilder vorladen) ───────────────
 let gallery = null;
@@ -196,7 +191,7 @@ zoom.innerHTML = `
       <div><dt data-zoom-dt-category>Category</dt><dd data-zoom-cat></dd></div>
       <div><dt data-zoom-dt-role>Role</dt>        <dd data-zoom-role></dd></div>
     </dl>
-    <a class="projects-zoom__link" data-zoom-link target="_blank" rel="noopener noreferrer"></a>
+    <a class="projects-zoom__link" data-zoom-link data-cursor-arrow-only target="_blank" rel="noopener noreferrer"></a>
   </div>
   <ul class="projects-zoom__map" aria-label="All projects"></ul>`;
 document.body.append(zoom);
@@ -256,7 +251,7 @@ function fillZoom(p) {
   zoomEls.role.textContent     = p.role[lang];
   zoom.querySelector('[data-zoom-dt-category]').textContent = ZOOM_LABELS[lang].category;
   zoom.querySelector('[data-zoom-dt-role]').textContent     = ZOOM_LABELS[lang].role;
-  zoomEls.link.textContent = `${ZOOM_LABELS[lang].view} ↗`;
+  zoomEls.link.innerHTML = `${ZOOM_LABELS[lang].view}<svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12 L12 4 M4.5 4 H12 V11.5"/></svg>`;
   zoomEls.link.href = p.href;
 }
 

@@ -335,8 +335,24 @@ export function mount(heroPanel) {
     active = false;
   }
 
+  // Touch-Support: erster Finger steuert den Glaseffekt
+  function onTouchMove(e) {
+    const t = e.touches[0];
+    mouse.target = clamp(t.clientX / win.innerWidth - 0.5, -0.5, 0.5);
+    mouse.ease   = ENTER_EASE;
+    active = true;
+  }
+  function onTouchEnd() {
+    mouse.target = 0;
+    mouse.ease   = LEAVE_EASE;
+    active = false;
+  }
+
   win.addEventListener('mousemove', onMove);
   win.addEventListener('mouseleave', onLeave);
+  win.addEventListener('touchmove', onTouchMove, { passive: true });
+  win.addEventListener('touchend', onTouchEnd, { passive: true });
+  win.addEventListener('touchcancel', onTouchEnd, { passive: true });
 
   // ── Render-Loop ────────────────────────────────────────────────────────────
   let dirty = true;
@@ -373,6 +389,9 @@ export function mount(heroPanel) {
       ro.disconnect();
       win.removeEventListener('mousemove', onMove);
       win.removeEventListener('mouseleave', onLeave);
+      win.removeEventListener('touchmove', onTouchMove);
+      win.removeEventListener('touchend', onTouchEnd);
+      win.removeEventListener('touchcancel', onTouchEnd);
       if (gl) {
         gl.deleteTexture(texture);
         gl.deleteProgram(program);

@@ -39,8 +39,8 @@
   opacity: 0;
   transform: translateY(6px);
   transition:
-    opacity 0.28s ease,
-    transform 0.28s ease;
+          opacity 0.28s ease,
+          transform 0.28s ease;
 }
 .demo-project-readout.is-visible {
   opacity: 1;
@@ -81,4 +81,34 @@
 }
 .projects-zoom__link[data-zoom-link] {
   gap: 0.5em;
+}
+
+/* ── Link-Pfeil (SVG) ────────────────────────────────────────────────────────
+ * Wird in About-, Contact- und Zoom-Links als <svg class="link-arrow"> eingefügt.
+ */
+.link-arrow {
+  flex: none;
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1em;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: translateY(0.04em);
+}
+
+.about-page__meta .link-arrow {
+  width: 0.95em;
+  height: 0.95em;
+}
+
+.contact-page__links a {
+  gap: clamp(8px, 0.9vw, 12px);
+}
+.contact-page__links .link-arrow {
+  width: clamp(18px, 1.8vw, 24px);
+  height: clamp(18px, 1.8vw, 24px);
 }
