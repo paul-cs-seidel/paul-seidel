@@ -5,8 +5,8 @@
 }
 
 .site-nav {
-  top: var(--ui-gutter-y);
-  right: var(--ui-edge-x);
+  top: var(--ui-edge-y-top);
+  right: var(--ui-edge-x-right);
   z-index: 80;
   pointer-events: auto;
   flex-direction: column;

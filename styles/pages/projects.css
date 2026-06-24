@@ -6,6 +6,7 @@
   overscroll-behavior: none;
   background: #fff;
   height: 100svh;
+  height: 100dvh;
   position: relative;
   overflow: hidden;
 }
@@ -13,7 +14,11 @@
 .projects-gridzoom {
   --projects-grid-padding-x: var(--ui-edge-x);
   height: 100svh;
-  padding: var(--ui-gutter-y) var(--projects-grid-padding-x) var(--ui-gutter-y);
+  height: 100dvh;
+  padding-top:    var(--ui-edge-y-top);
+  padding-right:  var(--projects-grid-padding-x);
+  padding-bottom: var(--ui-edge-y-bottom);
+  padding-left:   var(--projects-grid-padding-x);
   grid-template-rows: auto auto minmax(0, 1fr) auto;
   gap: clamp(14px, 2.2vw, 30px);
   display: grid;
@@ -358,7 +363,10 @@
 
 .projects-zoom {
   z-index: 70;
-  padding: var(--ui-gutter-y) var(--ui-edge-x);
+  padding-top:    var(--ui-edge-y-top);
+  padding-right:  var(--ui-edge-x-right);
+  padding-bottom: var(--ui-edge-y-bottom);
+  padding-left:   var(--ui-edge-x);
   color: #0b0b0a;
   background: #fff;
   grid-template-columns: minmax(280px, max(420px, 273px + 11.4333vw)) minmax(0, 980px);

@@ -6,7 +6,23 @@
   --muted: #10100fad;
   --line: #10100f24;
   --accent: #8f6200;
+
+  /* Basis-Gutters (Desktop + Landscape ohne Safe Area) */
   --ui-gutter-x: clamp(14px, 2.6vw, 44px);
   --ui-gutter-y: clamp(18px, 2.8vw, 40px);
-  --ui-edge-x: var(--ui-gutter-x);
+
+  /* Safe-Area-Insets (0px als Fallback für Nicht-Notch-Geräte) */
+  --safe-top:    env(safe-area-inset-top,    0px);
+  --safe-right:  env(safe-area-inset-right,  0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left:   env(safe-area-inset-left,   0px);
+
+  /*
+   * Edge-Padding = Gutter + Safe Area
+   * Wird überall verwendet, wo Elemente bis zum physischen Rand gehen.
+   */
+  --ui-edge-x: max(var(--ui-gutter-x), var(--safe-left));
+  --ui-edge-x-right: max(var(--ui-gutter-x), var(--safe-right));
+  --ui-edge-y-top: max(var(--ui-gutter-y), var(--safe-top));
+  --ui-edge-y-bottom: max(var(--ui-gutter-y), var(--safe-bottom));
 }

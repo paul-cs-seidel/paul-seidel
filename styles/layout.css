@@ -10,6 +10,8 @@
   opacity: 0;
   pointer-events: none;
   position: fixed;
+  /* inset: 0 — geht bis hinter die System-UI (Edge-to-Edge).
+     Inhalte innerhalb der Page nutzen --ui-edge-* für Safe-Area-Abstände. */
   inset: 0;
 }
 
@@ -36,7 +38,11 @@
 
 .page-shell {
   height: 100svh;
-  padding: var(--ui-gutter-y) var(--ui-edge-x);
+  height: 100dvh;
+  padding-top:    var(--ui-edge-y-top);
+  padding-bottom: var(--ui-edge-y-bottom);
+  padding-left:   var(--ui-edge-x);
+  padding-right:  var(--ui-edge-x-right);
   grid-template-rows: auto minmax(0, 1fr);
   display: grid;
   overflow: hidden;
