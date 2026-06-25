@@ -36,6 +36,14 @@ function createMarkup(doc, cfg) {
   root.className = PRELOADER_CLASSES.root;
   root.setAttribute('aria-live', 'polite');
   root.setAttribute('aria-atomic', 'true');
+  // Hero-Bild vorladen: identische Background-Regeln wie .hero-section, damit
+  // beim Drain-Ende kein Bild-Wechsel sichtbar ist (Cache-Treffer).
+  if (cfg.heroImage) {
+    root.style.backgroundImage   = `url(${JSON.stringify(cfg.heroImage)})`;
+    root.style.backgroundSize    = 'cover';
+    root.style.backgroundPosition = 'center';
+    root.style.backgroundRepeat  = 'no-repeat';
+  }
 
   const svg = doc.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svg.setAttribute('class', PRELOADER_CLASSES.wave);
@@ -65,6 +73,8 @@ export function mount(root = globalThis.document?.body, options = {}) {
 
   const { root: el, wavePath, text } = createMarkup(doc, cfg);
   root.append(el);
+
+
 
   const waveState = { ...cfg.wave.full };
   const drawWave = () => wavePath.setAttribute('d', cfg.wave.path(waveState));

@@ -21,6 +21,13 @@ import { DEFAULT_GALLERY_OPTIONS, GALLERY_CLASSES } from './projects-gallery.con
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
+/** Liest das aktuelle Cursor-Label abhängig von html[lang]. */
+function resolveCursorLabel(cursorLabel, doc) {
+  if (typeof cursorLabel === 'string') return cursorLabel;
+  const lang = doc.documentElement.lang || 'en';
+  return cursorLabel[lang] ?? cursorLabel.en;
+}
+
 /** Baut die Marquee aus Projektdaten (3 Sets). */
 function buildMarquee(doc, projects, cfg) {
   const marquee = doc.createElement('div');
@@ -28,6 +35,8 @@ function buildMarquee(doc, projects, cfg) {
   marquee.setAttribute('aria-label', cfg.ariaLabel);
   const track = doc.createElement('div');
   track.className = GALLERY_CLASSES.track;
+
+  const label = resolveCursorLabel(cfg.cursorLabel, doc);
 
   for (let i = 0; i < cfg.setCount; i += 1) {
     const set = doc.createElement('div');
@@ -37,8 +46,8 @@ function buildMarquee(doc, projects, cfg) {
       item.type = 'button';
       item.className = GALLERY_CLASSES.item;
       item.classList.add(GALLERY_CLASSES.cursorTrigger);
-      item.dataset.cursorSplitLabel = cfg.cursorLabel;
-      item.dataset.tt = cfg.cursorLabel;
+      item.dataset.cursorSplitLabel = label;
+      item.dataset.tt = label;
       const card = doc.createElement('span');
       card.className = GALLERY_CLASSES.card;
       const figure = doc.createElement('figure');
@@ -71,6 +80,17 @@ export function mount(root, options = {}) {
   const track = root.querySelector(`.${GALLERY_CLASSES.track}`);
   const firstSet = track?.querySelector(`.${GALLERY_CLASSES.set}`);
   if (!track || !firstSet) return { destroy() {}, freeze() {} };
+
+  // Label bei Sprachwechsel aktualisieren (data-lang-Buttons setzen html[lang]).
+  const updateLabels = () => {
+    const label = resolveCursorLabel(cfg.cursorLabel, doc);
+    for (const item of track.querySelectorAll(`.${GALLERY_CLASSES.item}`)) {
+      item.dataset.cursorSplitLabel = label;
+      item.dataset.tt = label;
+    }
+  };
+  const langObserver = new MutationObserver(updateLabels);
+  langObserver.observe(doc.documentElement, { attributes: true, attributeFilter: ['lang'] });
 
   // Scroll-Zustand (im Original das `scrollRef`-Objekt).
   const state = { current: 0, speedScale: 0, wheelVelocity: 0, isPointerPaused: false, isRouteFrozen: false };
@@ -163,7 +183,7 @@ export function mount(root, options = {}) {
     if (!item) return;
     state.isPointerPaused = true;
     ramp();
-    options.onHover?.(projectIdOf(item), item); // bottom-left-Readout o. Ä.
+    options.onHover?.(projectIdOf(item), item);
   };
   const onPointerOut = (event) => {
     const item = event.target.closest(`.${GALLERY_CLASSES.item}`);
@@ -175,7 +195,7 @@ export function mount(root, options = {}) {
   const onClick = (event) => {
     const item = event.target.closest(`.${GALLERY_CLASSES.item}`);
     if (!item) return;
-    options.onSelect?.(projectIdOf(item), item); // FLIP-Zoom o. Ä.
+    options.onSelect?.(projectIdOf(item), item);
   };
 
   measure();
@@ -194,23 +214,18 @@ export function mount(root, options = {}) {
   const startTimer = gsap.delayedCall(cfg.speed.startDelay, ramp);
   gsap.ticker.add(tick);
 
-  // Alle Karten (alle 3 Sets) fuer das manuelle Enter/Reset.
   const allCards = [...track.querySelectorAll(`.${GALLERY_CLASSES.card}`)];
   let enterTl = null;
 
-  // Karten sofort in Ausgangszustand (versteckt) — enterCards() wird
-  // vom Aufrufer (main.js) in onContentReveal manuell getriggert.
   if (allCards.length > 0) {
     gsap.set(allCards, { ...cfg.enter.from, force3D: true });
   }
 
   return {
-    /** Route-Freeze setzen (stoppt Autoscroll + nullt Velocity). */
     freeze(frozen) {
       state.isRouteFrozen = Boolean(frozen);
       ramp();
     },
-    /** Karten-Enter-Animation manuell starten (nach Seitenwechsel). */
     enterCards() {
       enterTl?.kill();
       if (allCards.length > 0) {
@@ -218,7 +233,6 @@ export function mount(root, options = {}) {
         enterTl = gsap.timeline().to(allCards, { ...cfg.enter.to });
       }
     },
-    /** Karten sofort zuruecksetzen (vor dem naechsten Enter). */
     resetCards() {
       enterTl?.kill();
       enterTl = null;
@@ -229,6 +243,7 @@ export function mount(root, options = {}) {
     state,
     destroy() {
       controller.abort();
+      langObserver.disconnect();
       gsap.ticker.remove(tick);
       startTimer.kill();
       enterTl?.kill();

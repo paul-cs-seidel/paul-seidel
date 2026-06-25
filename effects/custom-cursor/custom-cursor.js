@@ -100,7 +100,7 @@ function setupSplitMouse(nodes, cfg, signal, win) {
     split = new SplitType(label, { types: 'chars,words' });
     const chars = [...label.querySelectorAll('.char')];
     for (const char of chars) {
-      const value = char.textContent;
+      const value = char.textContent.replace(/\u00A0/g, ' ');
       char.textContent = '';
       for (let i = 0; i < s.write.fillers; i += 1) {
         const filler = win.document.createElement('span');
@@ -130,7 +130,7 @@ function setupSplitMouse(nodes, cfg, signal, win) {
       const label = win.document.createElement('div');
       label.className = CURSOR_CLASSES.splitLabel;
       if (target.dataset.w != null) label.classList.add(CURSOR_CLASSES.splitWide);
-      label.textContent = text;
+      label.textContent = text.replace(/ /g, '\u00A0');
       child.append(label);
       el.append(child);
 

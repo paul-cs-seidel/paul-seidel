@@ -23,7 +23,7 @@ export const GALLERY_CLASSES = Object.freeze({
 
 export const DEFAULT_GALLERY_OPTIONS = Object.freeze({
   setCount: 3, // identische Sets für den nahtlosen Loop (Z6498)
-  cursorLabel: 'View Project', // data-cursor-stalker-label je Item (Z6510)
+  cursorLabel: Object.freeze({ en: 'View_Project', de: 'Projekt_ansehen' }),
   ariaLabel: 'Looping project gallery', // (Z6494)
   mobileQuery: '(max-width: 620px)', // si() (Z6331)
   triggerEvent: 'signal-pole:entered', // Enter-Auslöser (Z6480)
@@ -39,10 +39,6 @@ export const DEFAULT_GALLERY_OPTIONS = Object.freeze({
     velocityCutoff: 0.08, // darunter wheelVelocity = 0 (Z6417)
     wheelClamp: 2800, // |wheelVelocity| ≤ 2800 (Z6153)
     wheelLineHeight: 42, // deltaMode==1 (Zeilen) → ×42 px (Z6164)
-    /**
-     * Wheel-Sensitivität (`se` im Original, an E übergeben Z6147). Exakter Wert
-     * nicht lokalisiert → Default 1; bei Bedarf hier feinjustieren.
-     */
     wheelFactor: 1,
   }),
 
@@ -51,7 +47,7 @@ export const DEFAULT_GALLERY_OPTIONS = Object.freeze({
     resume: Object.freeze({ duration: 0.86, ease: 'power2.out' }),
     pause: Object.freeze({ duration: 0.58, ease: 'power3.out' }),
     freezeVelocity: Object.freeze({ duration: 0.5, ease: 'power3.out' }),
-    startDelay: 0.48, // Autoscroll startet nach 0.48 s (Z6409)
+    startDelay: 0.48,
   }),
 
   /** Karten-Enter-Animation (Z6451–6475). */

@@ -7,13 +7,13 @@
 
 .about-page__content {
   place-self: center;
-  width: min(max(760px, 494px + 18.2vw), 100%);
+  width: min(max(600px, 494px + 18.2vw), 100%);
   margin-top: clamp(-48px, -4vh, -18px);
 }
 
 .about-page__body {
   border-top: 1px solid #0b0b0a24;
-  width: min(max(620px, 403px + 16.275vw), 100%);
+  width: min(max(600px, 494px + 18.2vw), 100%);
   margin: clamp(28px, 5vh, 48px) auto 0;
   padding-top: clamp(16px, 2.4vw, 26px);
 }

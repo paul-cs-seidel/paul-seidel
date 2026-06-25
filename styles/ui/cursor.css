@@ -74,7 +74,7 @@
   letter-spacing: 0.035em;
   background: var(--mouse-dark);
   align-items: baseline;
-  padding: 2px 4px 1px;
+  padding: 4px 4px 4px;
   font-size: max(10px, min(0.667vw, 6.5px + 0.23345vw));
   font-weight: 700;
   line-height: 1.1;

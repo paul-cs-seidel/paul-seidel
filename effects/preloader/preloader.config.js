@@ -28,6 +28,8 @@ export const PRELOADER_PAGE = Object.freeze({
   enteredEvent: 'signal-pole:entered',
 });
 
+
+
 export const DEFAULT_PRELOADER_OPTIONS = Object.freeze({
   /** Loop-Nachrichten (`Aj`, Z51024). Erste ist auch das Start-Markup. */
   messages: Object.freeze(['Loading...', 'Almost there...', 'Just a moment...']),
@@ -35,6 +37,7 @@ export const DEFAULT_PRELOADER_OPTIONS = Object.freeze({
   farewell: 'Thanks for waiting - all set.',
   /** Zeichensatz des Scramble-Effekts (`AW`, Z51025). */
   scrambleChars: 'upperAndLowerCase0123456789<>!?_#*+',
+  heroImage: null,
 
   /** Wellen-SVG: viewBox + Pfad-Schablone + drei Zustände (Z51188–51209). */
   wave: Object.freeze({
