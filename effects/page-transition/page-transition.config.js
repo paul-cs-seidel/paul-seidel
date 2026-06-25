@@ -53,12 +53,12 @@ export const DEFAULT_TRANSITION_OPTIONS = Object.freeze({
   /** Clip-Morph-Timeline (Z7698–7724). */
   timeline: Object.freeze({
     totalDuration: 1.95, // s6 = 1.3 + 0.65 (Z7519)
-    dim: Object.freeze({ brightness: 0.32, duration: 0.5, ease: 'power2.inOut', at: 0 }), // (Z7715–7720)
+    dim: Object.freeze({ brightness: 0.21, duration: 0.5, ease: 'power2.inOut', at: 0 }), // (Z7715–7720)
     morphIn: Object.freeze({ to: 'mid', duration: 1.3, ease: 'routeCurve', at: 0 }), // (Z7722)
     morphOut: Object.freeze({ to: 'revealed', duration: 1.3, ease: 'settle', at: 0.65 }), // (Z7723)
     // Content-Reveal (Text) startet KURZ VOR Ende des Wischers (revealed @ 1.95),
     // damit Text und Aufdeckung ineinandergreifen statt nacheinander zu laufen.
-    contentRevealAt: 1.55,
+    contentRevealAt: 0.65,
     overlayFadeOut: Object.freeze({ duration: 0.18, ease: 'none', at: 1.97 }), // s6 + 0.02 (Z7724)
   }),
 });

@@ -45,7 +45,7 @@
 
 .projects-gridzoom__intro {
   z-index: 1;
-  width: min(max(460px, 299px + 10.7333vw), 100%);
+  width: min(max(550px, 300px + 10vw), 100%);
   margin: clamp(46px, 8vh, 82px) 0 0;
   position: relative;
 }
