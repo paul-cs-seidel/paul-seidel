@@ -13,7 +13,7 @@ export const CURSOR_CLASSES = Object.freeze({
 /** Worauf der SplitType-Cursor reagiert. */
 export const CURSOR_SELECTORS = Object.freeze({
   splitTrigger:
-      '[data-cursor-split-label]:not([aria-disabled="true"]), [data-cursor-arrow-only]:not([aria-disabled="true"]), .MW[data-tt]:not([aria-disabled="true"]), a[target="_blank"]:not([aria-disabled="true"])',
+      '[data-cursor-split-label]:not([aria-disabled="true"]), [data-cursor-arrow-only]:not([aria-disabled="true"]), .MW[data-tt]:not([aria-disabled="true"]), a[target="_blank"]:not([aria-disabled="true"]):not(.projects-zoom__link)',
   splitLabelAttr: 'data-cursor-split-label',
 });
 

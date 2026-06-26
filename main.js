@@ -193,7 +193,7 @@ zoom.innerHTML = `
       <div><dt data-zoom-dt-category>Category</dt><dd data-zoom-cat></dd></div>
       <div><dt data-zoom-dt-role>Role</dt>        <dd data-zoom-role></dd></div>
     </dl>
-    <a class="projects-zoom__link" data-zoom-link data-cursor-arrow-only target="_blank" rel="noopener noreferrer"></a>
+    <a class="projects-zoom__link" data-zoom-link target="_blank" rel="noopener noreferrer"></a>
   </div>
   <ul class="projects-zoom__map" aria-label="All projects"></ul>`;
 document.body.append(zoom);

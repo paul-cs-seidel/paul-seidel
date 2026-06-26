@@ -46,8 +46,6 @@ function buildMarquee(doc, projects, cfg) {
       item.type = 'button';
       item.className = GALLERY_CLASSES.item;
       item.classList.add(GALLERY_CLASSES.cursorTrigger);
-      item.dataset.cursorSplitLabel = label;
-      item.dataset.tt = label;
       const card = doc.createElement('span');
       card.className = GALLERY_CLASSES.card;
       const figure = doc.createElement('figure');
@@ -83,11 +81,7 @@ export function mount(root, options = {}) {
 
   // Label bei Sprachwechsel aktualisieren (data-lang-Buttons setzen html[lang]).
   const updateLabels = () => {
-    const label = resolveCursorLabel(cfg.cursorLabel, doc);
-    for (const item of track.querySelectorAll(`.${GALLERY_CLASSES.item}`)) {
-      item.dataset.cursorSplitLabel = label;
-      item.dataset.tt = label;
-    }
+    // cursor-Label entfernt; Sprachaktualisierung nur noch für aria-label etc.
   };
   const langObserver = new MutationObserver(updateLabels);
   langObserver.observe(doc.documentElement, { attributes: true, attributeFilter: ['lang'] });
