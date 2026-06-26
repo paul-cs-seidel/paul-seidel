@@ -5,7 +5,7 @@
  */
 
 /* Back-Button + Sprachumschalter nebeneinander in der Kopfzeile. */
-.demo-header-controls {
+.header__left {
   display: inline-flex;
   align-items: center;
   gap: clamp(12px, 1.4vw, 18px);
@@ -15,11 +15,6 @@
 .about-page__content,
 .contact-page__content {
   place-self: center;
-}
-
-.back-circle-control svg {
-  width: 52%;
-  height: 52%;
 }
 
 /* Seitenübergang: Snapshot der alten Seite auf weißem Grund → sauberer Wisch. */

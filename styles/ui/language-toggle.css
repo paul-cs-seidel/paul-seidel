@@ -1,13 +1,12 @@
-/* UI — Sprachumschalter (EN/JA) — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
+/* UI — Sprachumschalter — eine einzige Klasse für alle Header. */
 
-.about-language-toggle {
+.lang-toggle {
   pointer-events: auto;
-  justify-self: start;
   gap: 8px;
   display: inline-flex;
 }
 
-.about-language-toggle button {
+.lang-toggle button {
   appearance: none;
   color: #0b0b0a6b;
   cursor: pointer;
@@ -17,55 +16,20 @@
   background: 0 0;
   border: 0;
   padding: 0;
-  transition:
-    color 0.18s,
-    transform 0.18s;
+  transition: color 0.18s, transform 0.18s;
 }
 
-.about-language-toggle button:hover {
+.lang-toggle button:hover {
   color: #0b0b0a;
   transform: translateY(-1px);
 }
 
-.about-language-toggle button[aria-pressed='true'] {
-  color: #0b0b0a;
-}
-
-.projects-language-toggle {
-  pointer-events: auto;
-  gap: 8px;
-  display: inline-flex;
-}
-
-.projects-language-toggle button {
-  appearance: none;
-  color: #0b0b0a6b;
-  cursor: pointer;
-  font: inherit;
-  letter-spacing: 0.045em;
-  text-transform: uppercase;
-  background: 0 0;
-  border: 0;
-  padding: 0;
-  transition:
-    color 0.18s,
-    transform 0.18s;
-}
-
-.projects-language-toggle button:hover {
-  color: #0b0b0a;
-  transform: translateY(-1px);
-}
-
-.projects-language-toggle button[aria-pressed='true'] {
+.lang-toggle button[aria-pressed='true'] {
   color: #0b0b0a;
 }
 
 @media (max-width: 620px) {
-  .about-language-toggle {
-    justify-self: start;
-  }
-  .projects-zoom__header .projects-language-toggle button {
+  .projects-zoom__header .lang-toggle button {
     font-size: max(12px, min(3.529vw, 7.8px + 1.23515vw));
     line-height: 1;
   }

@@ -25,24 +25,6 @@
   overflow: hidden;
 }
 
-.projects-gridzoom__header {
-  color: #0b0b0a94;
-  letter-spacing: 0.035em;
-  text-transform: uppercase;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: start;
-  gap: 24px;
-  padding-right: clamp(120px, 18vw, 260px);
-  font-size: max(13px, min(1vw, 9.75px + 0.35vw));
-  font-weight: 500;
-  line-height: 0.95;
-  display: grid;
-}
-
-.projects-gridzoom__header span:last-child {
-  justify-self: end;
-}
-
 .projects-gridzoom__intro {
   z-index: 1;
   width: min(max(550px, 300px + 10vw), 100%);
@@ -390,10 +372,6 @@
   position: absolute;
 }
 
-.projects-zoom__back {
-  position: relative;
-}
-
 .projects-zoom__image {
   aspect-ratio: 16/9;
   background: #e9e6df;
@@ -674,31 +652,3 @@
   }
 }
 
-/* Language-Toggle im Zoom-Header */
-.projects-zoom__lang {
-  pointer-events: auto;
-  gap: 8px;
-  display: inline-flex;
-}
-
-.projects-zoom__lang button {
-  appearance: none;
-  color: #0b0b0a6b;
-  cursor: pointer;
-  font: inherit;
-  letter-spacing: 0.045em;
-  text-transform: uppercase;
-  background: 0 0;
-  border: 0;
-  padding: 0;
-  transition: color 0.18s, transform 0.18s;
-}
-
-.projects-zoom__lang button:hover {
-  color: #0b0b0a;
-  transform: translateY(-1px);
-}
-
-.projects-zoom__lang button[aria-pressed='true'] {
-  color: #0b0b0a;
-}

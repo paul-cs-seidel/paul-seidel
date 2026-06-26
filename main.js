@@ -174,12 +174,14 @@ zoom.className = 'projects-zoom';
 zoom.hidden = true;
 zoom.innerHTML = `
   <div class="projects-zoom__header">
-    <button class="back-circle-control projects-zoom__back" type="button" data-zoom-close aria-label="Close">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19"/></svg>
-    </button>
-    <div class="projects-zoom__lang" aria-label="Language">
-      <button type="button" data-lang="en" aria-pressed="true">EN</button>
-      <button type="button" data-lang="de" aria-pressed="false">DE</button>
+    <div class="header__left">
+      <button class="back-circle-control" type="button" data-zoom-close aria-label="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19"/></svg>
+      </button>
+      <div class="lang-toggle" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang="de" aria-pressed="false">DE</button>
+      </div>
     </div>
   </div>
   <div class="projects-zoom__image"><img data-zoom-image alt=""/></div>

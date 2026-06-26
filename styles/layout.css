@@ -48,24 +48,6 @@
   overflow: hidden;
 }
 
-.page-shell__header {
-  color: #0b0b0a94;
-  letter-spacing: 0.035em;
-  text-transform: uppercase;
-  grid-template-columns: auto auto minmax(0, 1fr);
-  align-items: center;
-  gap: 24px;
-  padding-right: clamp(120px, 18vw, 260px);
-  font-size: max(13px, min(1vw, 9.75px + 0.35vw));
-  font-weight: 500;
-  line-height: 0.95;
-  display: grid;
-}
-
-.page-shell__header span:last-child {
-  justify-self: end;
-}
-
 .page-shell__intro {
   align-self: start;
   width: min(max(460px, 299px + 10.7333vw), 100%);
@@ -182,14 +164,6 @@
 }
 
 @media (max-width: 620px) {
-  .page-shell__header,
-  .projects-gridzoom__header {
-    padding-right: 0;
-  }
-  .page-shell__header span:last-child,
-  .projects-gridzoom__header span:last-child {
-    display: none;
-  }
   .about-page__content .page-shell__intro {
     text-align: left;
   }
