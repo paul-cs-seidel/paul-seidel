@@ -137,15 +137,21 @@ export function mount(root, options = {}) {
 
   // ── Touch-Support (Swipe horizontal) ──────────────────────────────────────
   let touchStartX = 0;
+  let touchStartY = 0;
   let touchLastX  = 0;
   let touchLastT  = 0;
+  // Wurde der Finger gezogen, gilt das als Geste (Scroll/Fractal) — der danach
+  // synthetisierte Klick darf das Projekt dann NICHT oeffnen.
+  let touchDragged = false;
 
   const onTouchStart = (event) => {
     if (state.isRouteFrozen) return;
     const t = event.touches[0];
     touchStartX = t.clientX;
+    touchStartY = t.clientY;
     touchLastX  = t.clientX;
     touchLastT  = performance.now();
+    touchDragged = false;
     state.isPointerPaused = true;
     ramp();
   };
@@ -162,6 +168,8 @@ export function mount(root, options = {}) {
     touchLastX = t.clientX;
     touchLastT = now;
     const totalDX = Math.abs(t.clientX - touchStartX);
+    const totalDY = Math.abs(t.clientY - touchStartY);
+    if (totalDX > cfg.tapSlop || totalDY > cfg.tapSlop) touchDragged = true;
     if (totalDX > 8) event.preventDefault();
   };
 
@@ -189,6 +197,11 @@ export function mount(root, options = {}) {
   const onClick = (event) => {
     const item = event.target.closest(`.${GALLERY_CLASSES.item}`);
     if (!item) return;
+    // Gezogener Finger = Geste (Scroll/Fractal) → Projekt nicht oeffnen.
+    if (touchDragged) {
+      touchDragged = false;
+      return;
+    }
     options.onSelect?.(projectIdOf(item), item);
   };
 

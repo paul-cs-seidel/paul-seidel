@@ -5,8 +5,10 @@
   pointer-events: auto;
   overscroll-behavior: none;
   background: #fff;
-  height: 100svh;
-  height: 100dvh;
+  /* Weiß randlos über den ganzen Schirm (lvh = große Höhe) — sonst schimmert
+     unten der #f7f5ef-Panel-Hintergrund als Balken durch. Der Inhalt wird in
+     .projects-gridzoom (svh) über die Toolbar gehalten. */
+  height: 100%;
   position: relative;
   overflow: hidden;
 }
@@ -14,7 +16,6 @@
 .projects-gridzoom {
   --projects-grid-padding-x: var(--ui-edge-x);
   height: 100svh;
-  height: 100dvh;
   padding-top:    var(--ui-edge-y-top);
   padding-right:  var(--projects-grid-padding-x);
   padding-bottom: var(--ui-edge-y-bottom);
@@ -151,8 +152,25 @@
   transform: scale(1.06);
 }
 
-/* fractalEffect: nur das grosse Zoom-Bild (Detailansicht) bekommt den WebGL-Hover.
-   Der Canvas liegt ueber dem Zoom-<img> und blendet ein, sobald GL bereit ist. */
+/* Kein iOS-Langdruck-Menue ("Teilen / In Fotos sichern …") auf den Projektbildern.
+   Das Bild reagiert nur noch auf einfaches Tippen (oeffnen) bzw. Ziehen (Fractal). */
+.projects-marquee__item,
+.projects-gridzoom__item,
+.projects-zoom__image,
+.projects-zoom__map,
+.projects-marquee__figure img,
+.projects-gridzoom__figure img,
+.projects-zoom__image img,
+.projects-zoom__map img {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* fractalEffect: Der WebGL-Glas-Hover liegt sowohl auf dem grossen Zoom-Bild als
+   auch auf den Grid-Bildern (Hover am Desktop, Touch am Handy). Der Canvas liegt
+   ueber dem jeweiligen <img> und blendet ein, sobald GL bereit ist. */
 .fractal-effect__canvas {
   pointer-events: none;
   opacity: 0;
@@ -165,7 +183,7 @@
   inset: 0;
 }
 
-.projects-zoom__image.is-fractal-ready .fractal-effect__canvas {
+.Oi.is-fractal-ready > .fractal-effect__canvas {
   opacity: 1;
 }
 
@@ -605,9 +623,16 @@
   }
   .projects-zoom {
     -webkit-overflow-scrolling: touch;
+    /* An die sichtbare Hoehe binden (svh = inkl. Safari-Toolbar): so wird langer
+       Inhalt wirklich scrollbar, statt unter der Toolbar abgeschnitten zu werden.
+       inset:0 (Basisregel) wuerde die GROSSE Viewport-Hoehe nehmen → kein Scroll. */
+    inset: 0 0 auto 0;
+    height: 100svh;
     padding: 18px;
+    padding-bottom: max(18px, calc(env(safe-area-inset-bottom, 0px) + 28px));
     display: block;
     overflow: hidden auto;
+    overscroll-behavior: contain;
   }
   .projects-zoom__header {
     top: 18px;
@@ -618,6 +643,9 @@
     width: 100%;
     max-height: none;
     margin: 64px 0 0;
+    /* Vertikal scrollen geht auch, wenn der Finger auf dem Bild startet; der
+       Fractal-Effekt liest weiterhin die horizontale Fingerposition. */
+    touch-action: pan-y;
   }
   .projects-zoom__image img {
     height: 100%;

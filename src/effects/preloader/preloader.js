@@ -74,8 +74,6 @@ export function mount(root = globalThis.document?.body, options = {}) {
   const { root: el, wavePath, text } = createMarkup(doc, cfg);
   root.append(el);
 
-
-
   const waveState = { ...cfg.wave.full };
   const drawWave = () => wavePath.setAttribute('d', cfg.wave.path(waveState));
 

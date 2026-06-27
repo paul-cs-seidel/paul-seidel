@@ -25,6 +25,11 @@ export const DEFAULT_FRACTAL_OPTIONS = Object.freeze({
   selector: '.Oi',
   imageSelector: 'img',
   pointerQuery: '(pointer: fine)',
+  // Lazy-Modus: WebGL-Kontext erst bei Interaktion (Hover/Touch) erzeugen und
+  // die Zahl gleichzeitiger Kontexte begrenzen. Noetig fuer das Grid, das viele
+  // `.Oi`-Hosts hat — Browser erlauben nur ~16 GL-Kontexte gleichzeitig.
+  lazy: false,
+  maxInstances: 6,
   dpr: Object.freeze({
     min: 2, // original: Math.max(window.devicePixelRatio, 2)
     max: 2.5,

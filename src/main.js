@@ -6,6 +6,7 @@ import { mount as mountPreloader }  from './effects/preloader/preloader.js';
 import { mount as mountTransition } from './effects/page-transition/page-transition.js';
 import { mount as mountTextReveal } from './effects/text-reveal/text-reveal.js';
 import { mount as mountGallery }    from './effects/projects-gallery/projects-gallery.js';
+import { mount as mountFractal }    from './effects/fractal-effect/fractal-effect.js';
 
 import { PROJECTS }       from './data/projects.js';
 import { createReadout }  from './ui/readout.js';
@@ -38,12 +39,19 @@ const readout  = createReadout(() => language.lang);
 
 // ── Gallery VOR dem ersten Navigate aufbauen (Bilder vorladen) ────────────────
 let zoom;
-const gallery = mountGallery(panels.get('projects').querySelector('[data-gallery-root]'), {
+const galleryRoot = panels.get('projects').querySelector('[data-gallery-root]');
+const gallery = mountGallery(galleryRoot, {
   projects: PROJECTS.map((p) => ({ id: p.id, image: p.image })),
   onHover:  (id) => (id ? readout.show(id) : readout.hide()),
   onSelect: (id, el) => zoom.open(id, el),
 });
 gallery.freeze(true);                          // Scroll stoppen bis Projects-Panel aktiv ist
+
+// Fractal-Glas-Effekt auf den Grid-Bildern (Hover am Desktop, Touch am Handy).
+// Lazy: der WebGL-Kontext entsteht erst beim Beruehren/Hovern eines Bildes und
+// folgt dann dem Finger/Cursor. Ein gezogener Finger loest den Effekt aus, ohne
+// das Projekt zu oeffnen (siehe Gallery: gezogene Touches unterdruecken den Klick).
+mountFractal(galleryRoot, { lazy: true });
 
 // ── Zoom + Routing verdrahten ─────────────────────────────────────────────────
 zoom = createZoom({ getLang: () => language.lang, gallery, readout });

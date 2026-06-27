@@ -1,20 +1,33 @@
 /* UI — Preloader — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
 
+/*
+ * Edge-to-Edge waehrend des Ladens: Solange noch nicht "betreten" (is-entered),
+ * ist der Seitenhintergrund dunkel wie der Loader. So ist auch die Safe Area
+ * hinter der iOS-Statusleiste/Home-Indicator dunkel — der Loader wirkt komplett
+ * randlos, statt oben/unten einen weissen Streifen zu zeigen. Nach dem Laden
+ * faellt die Regel weg und der Hintergrund ist wieder hell (var(--background)).
+ */
+html:not(.is-entered) {
+  background: #050505;
+}
+html:not(.is-entered) body {
+  background: #050505;
+}
+
 .preloader {
   z-index: 20;
   color: #ffffffeb;
   transform-origin: bottom;
-  background: 0 0;
+  background: #050505;
   place-items: center;
   /*
-   * Edge-to-Edge: inset: 0 — der Preloader geht bis hinter die Notch.
-   * Das eigene Padding respektiert die Safe Areas, damit der Text nie hinter
-   * Home-Indicator oder Statusleiste fällt.
+   * Edge-to-Edge: inset: 0 — der Preloader geht bis hinter Notch und
+   * Home-Indicator. WICHTIG: KEIN Padding hier. Die Wellen-<svg> ist
+   * `position:absolute; inset:0` und würde sonst nur die PADDING-Box füllen
+   * (abspos inset bezieht sich auf die Padding-Box) → ein heller Streifen hinter
+   * der Statusleiste bliebe übrig. Der Text ist zentriert und damit ohnehin
+   * safe; den Safe-Area-Abstand übernimmt .preloader__inner.
    */
-  padding-top:    max(clamp(20px, 4vw, 45px), env(safe-area-inset-top,    0px));
-  padding-right:  max(clamp(20px, 4vw, 45px), env(safe-area-inset-right,  0px));
-  padding-bottom: max(clamp(20px, 4vw, 45px), env(safe-area-inset-bottom, 0px));
-  padding-left:   max(clamp(20px, 4vw, 45px), env(safe-area-inset-left,   0px));
   display: grid;
   position: fixed;
   inset: 0;
@@ -35,6 +48,10 @@
   z-index: 1;
   place-items: center;
   min-height: 1.4em;
+  /* Safe-Area-Abstand jetzt hier (statt auf .preloader), damit die Welle
+     darüber edge-to-edge bleibt. Hält den Text aus Notch/Home-Indicator. */
+  padding: max(env(safe-area-inset-top, 0px), env(safe-area-inset-bottom, 0px))
+           max(env(safe-area-inset-right, 0px), env(safe-area-inset-left, 0px));
   display: grid;
   position: relative;
 }

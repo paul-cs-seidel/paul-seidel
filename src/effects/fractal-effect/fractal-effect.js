@@ -177,15 +177,21 @@ class FractalImage {
     const updateFromEvent = (event) => {
       const x = event.touches ? event.touches[0]?.clientX : event.clientX;
       if (x == null) return;
+      // Bound bei jeder Bewegung frisch messen: Im Grid wandert der Host (Marquee
+      // scrollt), daher reicht das nur-bei-Resize gemessene bound nicht aus.
+      const rect = this.host.getBoundingClientRect();
+      this.bound = { left: rect.left, width: Math.max(rect.width, 1) };
       this.mouse.target = clamp((x - this.bound.left) / this.bound.width - 0.5, -0.5, 0.5);
       this.mouse.ease = this.cfg.mouse.enterEase;
       this.dirty = true;
     };
+    this.updateFromEvent = updateFromEvent;
     const enter = (event) => {
       this.active = true;
       this.host.classList.add(FRACTAL_CLASSES.active);
       updateFromEvent(event);
     };
+    this.enter = enter;
     const leave = () => {
       this.active = false;
       this.mouse.target = 0;
@@ -276,13 +282,10 @@ class FractalImage {
 export function mount(root, options = {}) {
   if (!root) return { destroy() {}, refresh() {} };
   const cfg = mergeOptions(options);
-  const doc = root.ownerDocument;
-  const win = doc.defaultView ?? globalThis;
-  const fine = win.matchMedia?.(cfg.pointerQuery).matches ?? true;
-  if (!fine) return { destroy() {}, refresh() {} };
-
   const controller = new AbortController();
+  const { signal } = controller;
   const instances = new Map();
+  const order = []; // Reihenfolge der Nutzung (LRU) fuer die Pool-Begrenzung
   let tickerActive = false;
 
   const tick = (time) => {
@@ -295,29 +298,68 @@ export function mount(root, options = {}) {
   };
 
   const create = async (host) => {
-    if (instances.has(host)) return;
+    if (instances.has(host)) return instances.get(host);
     const instance = new FractalImage(host, cfg);
     instances.set(host, instance);
-    const ready = await instance.init(controller.signal);
-    if (!ready) instances.delete(host);
+    const ready = await instance.init(signal);
+    if (!ready) {
+      instances.delete(host);
+      return null;
+    }
+    return instance;
   };
 
-  const refresh = () => {
-    root.querySelectorAll(cfg.selector).forEach((host) => {
-      create(host);
-    });
+  // Pool begrenzen: aelteste inaktive Instanz freigeben, sobald das Limit faellt.
+  const trimPool = (keep) => {
+    const i = order.indexOf(keep);
+    if (i !== -1) order.splice(i, 1);
+    order.push(keep);
+    let guard = order.length;
+    while (order.length > cfg.maxInstances && guard-- > 0) {
+      const victim = order.shift();
+      const inst = instances.get(victim);
+      if (victim === keep || (inst && inst.active)) {
+        order.push(victim); // noch gebraucht/aktiv → hinten wieder anstellen
+        continue;
+      }
+      inst?.destroy();
+      instances.delete(victim);
+    }
+  };
+
+  if (cfg.lazy) {
+    // Erst bei Interaktion einen Kontext erzeugen — und nur fuer den beruehrten
+    // Host. Folge-Events (move/leave/end) faengt die Instanz selbst ab.
+    const onEnter = (event) => {
+      const host = event.target.closest?.(cfg.selector);
+      if (!host || !root.contains(host)) return;
+      trimPool(host);
+      create(host).then((instance) => {
+        if (!instance) return;
+        startTicker();
+        instance.enter(event);
+      });
+    };
+    root.addEventListener('pointerover', onEnter, { signal });
+    root.addEventListener('touchstart', onEnter, { passive: true, signal });
     startTicker();
-  };
-
-  refresh();
+  } else {
+    root.querySelectorAll(cfg.selector).forEach((host) => create(host));
+    startTicker();
+  }
 
   return {
-    refresh,
+    refresh() {
+      if (cfg.lazy) return;
+      root.querySelectorAll(cfg.selector).forEach((host) => create(host));
+      startTicker();
+    },
     destroy() {
       controller.abort();
       gsap.ticker.remove(tick);
       for (const instance of instances.values()) instance.destroy();
       instances.clear();
+      order.length = 0;
     },
   };
 }

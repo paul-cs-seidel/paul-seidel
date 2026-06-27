@@ -27,6 +27,9 @@ export const DEFAULT_GALLERY_OPTIONS = Object.freeze({
   ariaLabel: 'Looping project gallery', // (Z6494)
   mobileQuery: '(max-width: 620px)', // si() (Z6331)
   triggerEvent: 'signal-pole:entered', // Enter-Auslöser (Z6480)
+  tapSlop: 10, // px: ab dieser Fingerbewegung gilt es als Geste (Drag), nicht als Tap
+
+
 
   /** Track-Grundtransform: Mitte des 3er-Loops, vertikal zentriert (Z6393). */
   trackTransform: Object.freeze({ xPercent: -33.333333333333336, yPercent: -50 }),

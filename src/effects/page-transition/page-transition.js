@@ -36,9 +36,12 @@ const EASES = Object.fromEntries(
 );
 
 // Stage-Maße: ein 100×100-Feld, das den Viewport komplett überdeckt (ot, Z7783).
-function stage(win) {
+// `height` muss die VOLLE Bildschirmhöhe sein (nicht win.innerHeight — das ist auf
+// iOS die kleine, toolbar-bereinigte Höhe und ließe unten einen Streifen frei).
+function stage(win, height) {
   const w = win.innerWidth;
-  const scale = Math.max(w / 100, win.innerHeight / 100);
+  const h = height;
+  const scale = Math.max(w / 100, h / 100);
   const leftX = (w - 100 * scale) / 2;
   return { centerX: w / 2, leftX, rightX: leftX + 100 * scale, scale };
 }
@@ -106,8 +109,10 @@ export function mount(root = globalThis.document?.body, options = {}) {
   root.append(nodes.root);
 
   let active = null; // laufende Timeline
+  // Volle Bildschirmhöhe = Höhe des inset:0-Overlays (deckt auch Toolbar-Bereich).
+  const measureStage = () => stage(win, nodes.root.getBoundingClientRect().height);
   // Ruhezustand: voll deckend, unsichtbar.
-  drawCovered(nodes.clipPath, cfg.geometry.covered, stage(win));
+  drawCovered(nodes.clipPath, cfg.geometry.covered, measureStage());
   gsap.set(nodes.root, { autoAlpha: 0, pointerEvents: 'none' });
 
   /**
@@ -117,7 +122,7 @@ export function mount(root = globalThis.document?.body, options = {}) {
    */
   function transition({ onReveal, onContentReveal, onComplete, snapshot } = {}) {
     active?.kill();
-    const m = stage(win);
+    const m = measureStage();
     const shape = { ...cfg.geometry.covered };
 
     if (snapshot) nodes.snapshot.replaceChildren(snapshot);
@@ -131,7 +136,7 @@ export function mount(root = globalThis.document?.body, options = {}) {
         defaults: { ease: 'none' },
         onComplete: () => {
           gsap.set(nodes.root, { autoAlpha: 0, pointerEvents: 'none' });
-          drawCovered(nodes.clipPath, cfg.geometry.covered, stage(win));
+          drawCovered(nodes.clipPath, cfg.geometry.covered, measureStage());
           nodes.snapshot.replaceChildren();
           onComplete?.();
           resolve();
