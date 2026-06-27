@@ -1,0 +1,38 @@
+/* UI — Hover-Readout (Kategorie / Rolle + Titel), unten links über der Gallery. */
+
+.project-readout {
+  position: fixed;
+  left: var(--ui-edge-x, clamp(20px, 4vw, 64px));
+  bottom: var(--ui-gutter-y, clamp(20px, 3vw, 44px));
+  z-index: 6;
+  max-width: 70vw;
+  color: #0b0b0a;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity 0.28s ease,
+    transform 0.28s ease;
+}
+
+.project-readout.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.project-readout span {
+  display: block;
+  margin-bottom: 7px;
+  color: #0b0b0a78;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  font-size: max(11px, min(0.8vw, 7px + 0.28vw));
+  line-height: 1.2;
+}
+
+.project-readout strong {
+  display: block;
+  font-weight: 500;
+  font-size: max(20px, min(2vw, 16px + 0.7vw));
+  line-height: 1;
+}

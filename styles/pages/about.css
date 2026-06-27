@@ -67,14 +67,9 @@
   display: inline-flex;
 }
 
-.about-page__meta .inline-link-arrow {
-  color: #0b0b0a;
-  fill: currentColor;
-  flex: none;
-  width: 15px;
-  height: 15px;
-  transition: opacity 0.18s;
-  transform: translateY(0.04em);
+.about-page__meta .link-arrow {
+  width: 0.95em;
+  height: 0.95em;
 }
 
 .about-page__meta a:hover {

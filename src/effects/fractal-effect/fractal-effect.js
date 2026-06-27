@@ -14,7 +14,7 @@ import {
   FRACTAL_EVENTS,
   FRAGMENT_SHADER,
   VERTEX_SHADER,
-} from './fractalEffect.config.js';
+} from './fractal-effect.config.js';
 
 const clamp = (value, min, max) => Math.max(min, Math.min(value, max));
 const lerp = (from, to, ease) => from * (1 - ease) + to * ease;

@@ -94,9 +94,18 @@ export function mount(root = globalThis.document?.body, options = {}) {
     win.dispatchEvent(new win.CustomEvent(PRELOADER_PAGE.enteredEvent));
   };
 
+  let closed = false;
   const close = () => {
+    if (closed) return;
+    closed = true;
     enter();
-    gsap.set(el, { display: 'none' });
+    cfg.onClose?.(); // Reveal startet sofort; der Loader blendet darüber aus.
+    gsap.to(el, {
+      autoAlpha: 0,
+      duration: cfg.exit.duration,
+      ease: cfg.exit.ease,
+      onComplete: () => gsap.set(el, { display: 'none' }),
+    });
   };
 
   // Wellen-Drain: voll → mittig → leer; unter Schwelle gilt „betreten".
@@ -105,6 +114,9 @@ export function mount(root = globalThis.document?.body, options = {}) {
     const onUpdate = () => {
       drawWave();
       if (waveState.bottomY <= cfg.wave.drainThreshold) enter();
+      // Welle praktisch leer (Hero voll sichtbar) → Loader schließen + Reveal
+      // starten, ohne auf den asymptotischen Timeline-Schwanz zu warten.
+      if (waveState.bottomY <= cfg.wave.closeThreshold) close();
     };
     const tl = gsap.timeline({ onComplete: close });
     tl.to(waveState, { ...cfg.wave.mid, duration: cfg.drain.first.duration, ease: EASES[cfg.drain.first.ease], onUpdate })

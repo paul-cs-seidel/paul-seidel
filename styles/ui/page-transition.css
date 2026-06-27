@@ -48,6 +48,11 @@
   overflow: hidden;
 }
 
+/* Snapshot der alten Seite auf weißem Grund → sauberer Wisch. */
+.page-transition__source-snapshot {
+  background: #fff;
+}
+
 .page-transition__background-snapshot {
   z-index: 0;
   pointer-events: none;
@@ -60,9 +65,4 @@
   width: 100%;
   height: 100%;
   display: block;
-}
-
-.page-transition__source-clone {
-  opacity: 1 !important;
-  pointer-events: none !important;
 }

@@ -1,0 +1,16 @@
+/* UI — Link-Pfeil (SVG). Geteilt von About-, Contact- und Zoom-Links
+   (<svg class="link-arrow">). Größen-Overrides je Kontext in den Page-Styles. */
+
+.link-arrow {
+  flex: none;
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1em;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform: translateY(0.04em);
+}

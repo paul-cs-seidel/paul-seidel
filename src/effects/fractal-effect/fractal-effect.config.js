@@ -1,5 +1,5 @@
 /*
- * fractalEffect.config.js — Oi/Image-Hover aus
+ * fractal-effect.config.js — Oi/Image-Hover aus
  * /Users/paulseidel/Downloads/Paul-Seidel-Portfolio-main.zip extrahiert.
  *
  * Quelle: vendor/split/webgl-oi.js

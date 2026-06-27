@@ -361,6 +361,11 @@
   overflow: hidden;
 }
 
+/* `display:grid` würde sonst das [hidden]-Attribut überschreiben. */
+.projects-zoom[hidden] {
+  display: none;
+}
+
 .projects-zoom__header {
   top: var(--ui-gutter-y);
   left: var(--ui-edge-x);
@@ -374,7 +379,8 @@
 
 .projects-zoom__image {
   aspect-ratio: 16/9;
-  background: #e9e6df;
+  /* Transparent statt grauem Platzhalter: kein Aufblitzen während des FLIP-Morphs. */
+  background: transparent;
   grid-area: 1/2;
   justify-self: end;
   width: min(100%, 62vw, 980px, 160svh - 153.6px);
@@ -459,6 +465,7 @@
   border: 1px solid #0b0b0a3d;
   justify-content: center;
   align-items: center;
+  gap: 0.5em;
   min-height: 40px;
   margin-top: clamp(18px, 3vw, 32px);
   padding: 0 18px;

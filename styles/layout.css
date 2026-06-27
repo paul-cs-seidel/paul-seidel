@@ -36,6 +36,13 @@
   background: #fff;
 }
 
+/* Kopfzeile je Panel: Back-Button + Sprachumschalter nebeneinander. */
+.header__left {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(12px, 1.4vw, 18px);
+}
+
 .page-shell {
   height: 100svh;
   height: 100dvh;

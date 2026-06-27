@@ -38,6 +38,7 @@ export const DEFAULT_PRELOADER_OPTIONS = Object.freeze({
   /** Zeichensatz des Scramble-Effekts (`AW`, Z51025). */
   scrambleChars: 'upperAndLowerCase0123456789<>!?_#*+',
   heroImage: null,
+  onClose: null, // Callback, sobald der Loader vollständig geschlossen ist.
 
   /** Wellen-SVG: viewBox + Pfad-Schablone + drei Zustände (Z51188–51209). */
   wave: Object.freeze({
@@ -49,7 +50,11 @@ export const DEFAULT_PRELOADER_OPTIONS = Object.freeze({
     mid: Object.freeze({ bottomY: 50, controlY: 100, closeY: 0 }), // Az
     empty: Object.freeze({ bottomY: 0, controlY: 0, closeY: 0 }), // AV
     drainThreshold: 26, // ab bottomY ≤ 26 gilt „betreten" (Z51081/51091)
+    closeThreshold: 1.5, // ab hier ist die Welle praktisch leer → Loader schließen (statt auf das Timeline-Ende zu warten)
   }),
+
+  /** Loader-Ausblendung, sobald die Welle leer ist (kurzer Crossfade, kein Pop). */
+  exit: Object.freeze({ duration: 0.28, ease: 'power1.out' }),
 
   /** Scramble-Loop je Nachricht (Z51144–51158). */
   loop: Object.freeze({
