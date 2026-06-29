@@ -1,0 +1,17 @@
+{
+  "name": "Paul Seidel — Portfolio",
+  "short_name": "Paul Seidel",
+  "description": "Portfolio 2026 of Paul Seidel — UI/UX and creative front-end work.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

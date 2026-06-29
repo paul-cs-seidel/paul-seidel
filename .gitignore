@@ -9,3 +9,10 @@
 /dataSources/
 /node_modules
 .idea
+
+# Build output
+/dist
+
+# OS / editor cruft
+.DS_Store
+*.log

@@ -43,10 +43,10 @@
 
 .page-shell {
   height: 100dvh;
-  padding-top:    var(--ui-edge-y-top);
+  padding-top: var(--ui-edge-y-top);
   padding-bottom: var(--ui-edge-y-bottom);
-  padding-left:   var(--ui-edge-x);
-  padding-right:  var(--ui-edge-x-right);
+  padding-left: var(--ui-edge-x);
+  padding-right: var(--ui-edge-x-right);
   grid-template-rows: auto minmax(0, 1fr);
   display: grid;
   overflow: hidden;

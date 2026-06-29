@@ -1,13 +1,11 @@
 /*
- * text-reveal — Hirotos Text-Einblendung, framework-frei nachgebaut.
+ * text-reveal — Text-Einblendung (Headings → Zeilen, Stagger-Fade-Up).
  *
  * Headings innerhalb eines Containers werden per GSAP-SplitText in Zeilen
  * zerlegt (`.split-heading__line`), alle Ziele starten ausgeblendet (y:16) und
  * fahren beim Ereignis `signal-pole:entered` gestaffelt nach oben ein. Ist die
  * Seite schon „betreten" (`is-entered`), läuft der Reveal sofort.
- *
- * Original: Hook `sR` (_raw/vendor/050096.app-bundle.js ab Z6940), Antrieb GSAP
- * + SplitText (im Original `sB`/`sD`, v3.15.0). Werte: ./text-reveal.config.js.
+ * Antrieb: GSAP + SplitText. Werte: ./text-reveal.config.js.
  */
 import gsap from 'gsap';
 import SplitText from 'gsap/SplitText';
@@ -50,7 +48,9 @@ export function mount(container, options = {}) {
   const headingSet = new Set(headings);
 
   // Animationsziele: Headings → ihre Zeilen, sonst das Element selbst.
-  const items = targets.flatMap((el) => (headingSet.has(el) ? (headingLines.get(el) ?? [el]) : [el]));
+  const items = targets.flatMap((el) =>
+    headingSet.has(el) ? (headingLines.get(el) ?? [el]) : [el],
+  );
   gsap.set(items, { ...cfg.from, force3D: true });
 
   let timeline = null;
@@ -79,7 +79,11 @@ export function mount(container, options = {}) {
   // (z. B. erst NACH einem Seitenübergang, damit der Effekt sichtbar ist).
   if (options.autoplay !== false) {
     if (doc.documentElement.classList.contains(TEXT_REVEAL_TRIGGER.enteredClass)) reveal();
-    else win.addEventListener(TEXT_REVEAL_TRIGGER.event, reveal, { once: true, signal: controller.signal });
+    else
+      win.addEventListener(TEXT_REVEAL_TRIGGER.event, reveal, {
+        once: true,
+        signal: controller.signal,
+      });
   }
 
   return {

@@ -1,19 +1,14 @@
 /*
- * page-transition — Hirotos Clip-Path-Seitenübergang, framework-frei nachgebaut.
+ * page-transition — Clip-Path-Seitenübergang.
  *
  * Eine vollflächige Fläche (`.page-transition`) wird eingeblendet; ihr per SVG
  * `clipPath` definierter Wellen-Pfad morpht von „voll deckend" (covered) über
  * die Mitte (mid) zu „freigegeben" (revealed) — die einlaufende Seite wird so
- * von unten aufgewischt. Parallel dimmt die Helligkeit kurz ab.
+ * von unten aufgewischt. Parallel dimmt die Helligkeit kurz ab. Antrieb: GSAP
+ * + CustomEase. Werte: ./page-transition.config.js.
  *
- * Original: Komponente `s7` (_raw/vendor/050096.app-bundle.js ab Z7521), Clip-
- * Geometrie/Helfer `ot/oi/on/or` (Z7783–7807), Timeline (Z7698). Antrieb GSAP
- * + CustomEase (Signatur-Eases der App). Werte: ./page-transition.config.js.
- *
- * Abstrahiert: Das Original schnappschießt die *alte* Seite (DOM-Klon, Bild-
- * Rasterung, WebGL-Canvas) in `.page-transition__source-snapshot`. Diese
- * React/App-Maschinerie entfällt hier; `transition({ snapshot })` nimmt optional
- * ein fertiges Schnappschuss-Element. Der Clip-Reveal selbst ist 1:1.
+ * `transition({ snapshot })` nimmt optional ein fertiges Schnappschuss-Element
+ * der ausgehenden Seite für `.page-transition__source-snapshot`.
  */
 import gsap from 'gsap';
 import CustomEase from 'gsap/CustomEase';
@@ -32,10 +27,13 @@ const SVG_NS = 'http://www.w3.org/2000/svg';
 
 // CustomEases einmalig registrieren und als Instanzen bereithalten.
 const EASES = Object.fromEntries(
-  Object.entries(TRANSITION_EASES).map(([key, { name, path }]) => [key, CustomEase.create(name, path)]),
+  Object.entries(TRANSITION_EASES).map(([key, { name, path }]) => [
+    key,
+    CustomEase.create(name, path),
+  ]),
 );
 
-// Stage-Maße: ein 100×100-Feld, das den Viewport komplett überdeckt (ot, Z7783).
+// Stage-Maße: ein 100×100-Feld, das den Viewport komplett überdeckt.
 // `height` muss die VOLLE Bildschirmhöhe sein (nicht win.innerHeight — das ist auf
 // iOS die kleine, toolbar-bereinigte Höhe und ließe unten einen Streifen frei).
 function stage(win, height) {
@@ -46,25 +44,32 @@ function stage(win, height) {
   return { centerX: w / 2, leftX, rightX: leftX + 100 * scale, scale };
 }
 
-// Reiner Wellen-Pfad (oi, Z7805).
+// Reiner Wellen-Pfad.
 function wavePath(shape, m) {
   return `M ${m.leftX} ${shape.originY * m.scale} V ${shape.edgeY * m.scale} Q ${m.centerX} ${shape.controlY * m.scale} ${m.rightX} ${shape.edgeY * m.scale} V ${shape.closeY * m.scale} z`;
 }
 
-// Voll deckend: nur die Welle, nonzero (or, Z7789).
+// Voll deckend: nur die Welle, nonzero.
 function drawCovered(path, shape, m) {
   path.setAttribute('clip-rule', 'nonzero');
   path.setAttribute('fill-rule', 'nonzero');
   path.setAttribute('d', wavePath(shape, m));
 }
 
-// Reveal: Vollrechteck MINUS Welle, evenodd (on, Z7795).
+// Reveal: Vollrechteck MINUS Welle, evenodd.
 function drawMorph(path, shape, m) {
   path.setAttribute('clip-rule', 'evenodd');
   path.setAttribute('fill-rule', 'evenodd');
   path.setAttribute(
     'd',
-    [`M ${m.leftX} 0`, `H ${m.rightX}`, `V ${100 * m.scale}`, `H ${m.leftX}`, 'z', wavePath(shape, m)].join(' '),
+    [
+      `M ${m.leftX} 0`,
+      `H ${m.rightX}`,
+      `V ${100 * m.scale}`,
+      `H ${m.leftX}`,
+      'z',
+      wavePath(shape, m),
+    ].join(' '),
   );
 }
 
@@ -144,11 +149,41 @@ export function mount(root = globalThis.document?.body, options = {}) {
       });
       const redraw = () => drawMorph(nodes.clipPath, shape, m);
       tl.call(() => onReveal?.(), undefined, 0)
-        .to(nodes.nextContent, { [TRANSITION_VARS.brightness]: t.dim.brightness, duration: t.dim.duration, ease: t.dim.ease }, t.dim.at)
-        .to(shape, { ...cfg.geometry[t.morphIn.to], duration: t.morphIn.duration, ease: EASES[t.morphIn.ease], onUpdate: redraw }, t.morphIn.at)
-        .to(shape, { ...cfg.geometry[t.morphOut.to], duration: t.morphOut.duration, ease: EASES[t.morphOut.ease], onUpdate: redraw }, t.morphOut.at)
+        .to(
+          nodes.nextContent,
+          {
+            [TRANSITION_VARS.brightness]: t.dim.brightness,
+            duration: t.dim.duration,
+            ease: t.dim.ease,
+          },
+          t.dim.at,
+        )
+        .to(
+          shape,
+          {
+            ...cfg.geometry[t.morphIn.to],
+            duration: t.morphIn.duration,
+            ease: EASES[t.morphIn.ease],
+            onUpdate: redraw,
+          },
+          t.morphIn.at,
+        )
+        .to(
+          shape,
+          {
+            ...cfg.geometry[t.morphOut.to],
+            duration: t.morphOut.duration,
+            ease: EASES[t.morphOut.ease],
+            onUpdate: redraw,
+          },
+          t.morphOut.at,
+        )
         .call(() => onContentReveal?.(), undefined, t.contentRevealAt)
-        .to(nodes.root, { autoAlpha: 0, duration: t.overlayFadeOut.duration, ease: t.overlayFadeOut.ease }, t.overlayFadeOut.at);
+        .to(
+          nodes.root,
+          { autoAlpha: 0, duration: t.overlayFadeOut.duration, ease: t.overlayFadeOut.ease },
+          t.overlayFadeOut.at,
+        );
       active = tl;
     });
   }

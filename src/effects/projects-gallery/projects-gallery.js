@@ -1,19 +1,15 @@
 /*
- * projects-gallery — Hirotos Endlos-Projekt-Marquee, framework-frei nachgebaut.
+ * projects-gallery — Endlos-Projekt-Marquee.
  *
  * Ein Track aus 3 identischen Sets scrollt endlos: ein GSAP-Ticker schiebt den
  * Offset (Basis-Autoscroll + Wheel-Velocity mit Reibung) und wickelt ihn modulo
  * Set-Breite um (nahtloser Loop). Zeiger über einer Karte pausiert sanft
  * (`speedScale`-Rampe). Beim Ereignis `signal-pole:entered` fahren die Karten
- * gestaffelt ein.
- *
- * Original: Helfer sn/si/so (Z6327–6368) + Komponente `sl` (ab Z6369) in
- * _raw/vendor/050096.app-bundle.js. Antrieb: GSAP (ticker, quickSetter). Werte:
+ * gestaffelt ein. Antrieb: GSAP (ticker, quickSetter). Werte:
  * ./projects-gallery.config.js.
  *
- * Abstrahiert: der FLIP-Zoom einer Karte in die Detail-Ansicht (`.projects-zoom`)
- * nutzt das GSAP-Flip-Plugin, Projektdaten und Route-State der App. Statt ihn
- * nachzubauen, meldet ein Item-Klick `onSelect(index, element)`.
+ * Ein Item-Klick meldet `onSelect(id, element)`; den FLIP-Zoom in die
+ * Detail-Ansicht (`.projects-zoom`) übernimmt der Aufrufer.
  */
 import gsap from 'gsap';
 
@@ -21,8 +17,9 @@ import { DEFAULT_GALLERY_OPTIONS, GALLERY_CLASSES } from './projects-gallery.con
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
-/** Liest das aktuelle Cursor-Label abhängig von html[lang]. */
+/** Cursor-Label (View_Project / Projekt_ansehen) abhängig von html[lang]. */
 function resolveCursorLabel(cursorLabel, doc) {
+  if (!cursorLabel) return '';
   if (typeof cursorLabel === 'string') return cursorLabel;
   const lang = doc.documentElement.lang || 'en';
   return cursorLabel[lang] ?? cursorLabel.en;
@@ -36,8 +33,6 @@ function buildMarquee(doc, projects, cfg) {
   const track = doc.createElement('div');
   track.className = GALLERY_CLASSES.track;
 
-  const label = resolveCursorLabel(cfg.cursorLabel, doc);
-
   for (let i = 0; i < cfg.setCount; i += 1) {
     const set = doc.createElement('div');
     set.className = GALLERY_CLASSES.set;
@@ -46,6 +41,8 @@ function buildMarquee(doc, projects, cfg) {
       item.type = 'button';
       item.className = GALLERY_CLASSES.item;
       item.classList.add(GALLERY_CLASSES.cursorTrigger);
+      // Trigger + Beschriftung für den .mouse-SplitType-Cursor.
+      item.dataset.cursorSplitLabel = resolveCursorLabel(cfg.cursorLabel, doc);
       const card = doc.createElement('span');
       card.className = GALLERY_CLASSES.card;
       const figure = doc.createElement('figure');
@@ -79,15 +76,25 @@ export function mount(root, options = {}) {
   const firstSet = track?.querySelector(`.${GALLERY_CLASSES.set}`);
   if (!track || !firstSet) return { destroy() {}, freeze() {} };
 
-  // Label bei Sprachwechsel aktualisieren (data-lang-Buttons setzen html[lang]).
-  const updateLabels = () => {
-    // cursor-Label entfernt; Sprachaktualisierung nur noch für aria-label etc.
+  // Cursor-Label der Items bei Sprachwechsel aktualisieren (die data-lang-Buttons
+  // setzen html[lang]); der .mouse-Cursor liest data-cursor-split-label beim Hover.
+  const updateCursorLabels = () => {
+    const label = resolveCursorLabel(cfg.cursorLabel, doc);
+    for (const item of track.querySelectorAll(`.${GALLERY_CLASSES.item}`)) {
+      item.dataset.cursorSplitLabel = label;
+    }
   };
-  const langObserver = new MutationObserver(updateLabels);
+  const langObserver = new win.MutationObserver(updateCursorLabels);
   langObserver.observe(doc.documentElement, { attributes: true, attributeFilter: ['lang'] });
 
   // Scroll-Zustand (im Original das `scrollRef`-Objekt).
-  const state = { current: 0, speedScale: 0, wheelVelocity: 0, isPointerPaused: false, isRouteFrozen: false };
+  const state = {
+    current: 0,
+    speedScale: 0,
+    wheelVelocity: 0,
+    isPointerPaused: false,
+    isRouteFrozen: false,
+  };
   const controller = new AbortController();
   const { signal } = controller;
 
@@ -101,7 +108,8 @@ export function mount(root, options = {}) {
   };
   const measure = () => {
     const width = firstSet.getBoundingClientRect().width;
-    if (setWidth > 0 && width > 0 && setWidth !== width) state.current = (state.current / setWidth) * width;
+    if (setWidth > 0 && width > 0 && setWidth !== width)
+      state.current = (state.current / setWidth) * width;
     setWidth = width;
     render();
   };
@@ -111,10 +119,20 @@ export function mount(root, options = {}) {
     const paused = state.isPointerPaused || state.isRouteFrozen;
     const ramping = paused ? cfg.speed.pause : cfg.speed.resume;
     gsap.killTweensOf(state, 'speedScale');
-    gsap.to(state, { speedScale: paused ? 0 : 1, duration: ramping.duration, ease: ramping.ease, overwrite: 'auto' });
+    gsap.to(state, {
+      speedScale: paused ? 0 : 1,
+      duration: ramping.duration,
+      ease: ramping.ease,
+      overwrite: 'auto',
+    });
     if (state.isRouteFrozen) {
       gsap.killTweensOf(state, 'wheelVelocity');
-      gsap.to(state, { wheelVelocity: 0, duration: cfg.speed.freezeVelocity.duration, ease: cfg.speed.freezeVelocity.ease, overwrite: 'auto' });
+      gsap.to(state, {
+        wheelVelocity: 0,
+        duration: cfg.speed.freezeVelocity.duration,
+        ease: cfg.speed.freezeVelocity.ease,
+        overwrite: 'auto',
+      });
     }
   };
 
@@ -132,14 +150,18 @@ export function mount(root, options = {}) {
     const raw = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
     const delta = raw * (event.deltaMode === 1 ? cfg.scroll.wheelLineHeight : 1);
     gsap.killTweensOf(state, 'wheelVelocity');
-    state.wheelVelocity = clamp(state.wheelVelocity + delta * cfg.scroll.wheelFactor, -cfg.scroll.wheelClamp, cfg.scroll.wheelClamp);
+    state.wheelVelocity = clamp(
+      state.wheelVelocity + delta * cfg.scroll.wheelFactor,
+      -cfg.scroll.wheelClamp,
+      cfg.scroll.wheelClamp,
+    );
   };
 
   // ── Touch-Support (Swipe horizontal) ──────────────────────────────────────
   let touchStartX = 0;
   let touchStartY = 0;
-  let touchLastX  = 0;
-  let touchLastT  = 0;
+  let touchLastX = 0;
+  let touchLastT = 0;
   // Wurde der Finger gezogen, gilt das als Geste (Scroll/Fractal) — der danach
   // synthetisierte Klick darf das Projekt dann NICHT oeffnen.
   let touchDragged = false;
@@ -149,8 +171,8 @@ export function mount(root, options = {}) {
     const t = event.touches[0];
     touchStartX = t.clientX;
     touchStartY = t.clientY;
-    touchLastX  = t.clientX;
-    touchLastT  = performance.now();
+    touchLastX = t.clientX;
+    touchLastT = performance.now();
     touchDragged = false;
     state.isPointerPaused = true;
     ramp();
@@ -158,13 +180,17 @@ export function mount(root, options = {}) {
 
   const onTouchMove = (event) => {
     if (state.isRouteFrozen) return;
-    const t     = event.touches[0];
-    const now   = performance.now();
-    const dx    = touchLastX - t.clientX;
-    const dt    = Math.max(1, now - touchLastT);
-    const speed = dx / dt * 1000;
+    const t = event.touches[0];
+    const now = performance.now();
+    const dx = touchLastX - t.clientX;
+    const dt = Math.max(1, now - touchLastT);
+    const speed = (dx / dt) * 1000;
     gsap.killTweensOf(state, 'wheelVelocity');
-    state.wheelVelocity = clamp(speed * cfg.scroll.wheelFactor * 0.6, -cfg.scroll.wheelClamp, cfg.scroll.wheelClamp);
+    state.wheelVelocity = clamp(
+      speed * cfg.scroll.wheelFactor * 0.6,
+      -cfg.scroll.wheelClamp,
+      cfg.scroll.wheelClamp,
+    );
     touchLastX = t.clientX;
     touchLastT = now;
     const totalDX = Math.abs(t.clientX - touchStartX);

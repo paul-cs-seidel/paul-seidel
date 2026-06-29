@@ -17,8 +17,8 @@ Stilfläche: `../../styles/ui/preloader.css`.
 ```js
 import { mount } from './preloader.js';
 const pre = mount(document.body);
-pre.finish();   // Abschied vorzeitig auslösen (= Hero-Readiness im Original)
-pre.destroy();  // Timelines/delayedCalls killen + DOM entfernen
+pre.finish(); // Abschied vorzeitig auslösen (= Hero-Readiness im Original)
+pre.destroy(); // Timelines/delayedCalls killen + DOM entfernen
 ```
 
 Antrieb: **GSAP** + **ScrambleTextPlugin** (`gsap/ScrambleTextPlugin`; im Original
@@ -26,7 +26,7 @@ als Plugin `AG` gebündelt) + **CustomEase** (für den Wellen-Drain).
 
 ## Herkunft & Abweichungen
 
-`_raw/vendor/050096.app-bundle.js` — Konstanten `AH/Az/AV/Aj/AW` (Z51021–51025),
+Original-App-Bundle (nicht im Repo) — Konstanten `AH/Az/AV/Aj/AW` (Z51021–51025),
 Komponente `AY` (ab Z51027). Jeder Wert in der Config trägt seine Zeilennummer.
 
 - **Timer statt Hero-Readiness:** das Original startet den Abschied, sobald die

@@ -3,17 +3,22 @@ import { mount as mountTextReveal } from '../effects/text-reveal/text-reveal.js'
 
 export function createRouter({ panels, pageTransition, gallery, readout }) {
   const persistent = document.querySelector('.persistent-experience');
-  const navLinks   = [...document.querySelectorAll('.site-nav a[data-route]')];
+  const navLinks = [...document.querySelectorAll('.site-nav a[data-route]')];
 
   let currentRoute = 'home';
   let busy = false;
+
+  // Pro Panel den zuletzt gemounteten Text-Reveal merken, damit ein erneuter
+  // Besuch den alten Controller (SplitText + Tweens) sauber abbaut, statt ihn
+  // bei jeder Navigation verwaist liegen zu lassen.
+  const reveals = new Map();
 
   async function navigate(route) {
     if (busy || route === currentRoute || !panels.has(route)) return;
     busy = true;
     readout.hide();
 
-    const leavingProjects  = currentRoute === 'projects';
+    const leavingProjects = currentRoute === 'projects';
     const enteringProjects = route === 'projects';
 
     // Snapshot des aktuellen Panels als Übergangsbild klonen.
@@ -50,7 +55,10 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
 
         // Text-Reveal mit autoplay:false mounten → Texte werden sofort durch
         // gsap.set() unsichtbar gemacht. reveal() folgt in onContentReveal.
+        // Vorherigen Reveal desselben Panels zuvor abbauen.
+        reveals.get(route)?.destroy();
         pendingReveal = mountTextReveal(next, { autoplay: false });
+        reveals.set(route, pendingReveal);
       },
 
       // t = 1.55 s (contentRevealAt): Text-Reveal + Gallery-Enter gleichzeitig
@@ -74,7 +82,10 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
   }
 
   for (const link of navLinks) {
-    link.addEventListener('click', (e) => { e.preventDefault(); navigate(link.dataset.route); });
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigate(link.dataset.route);
+    });
   }
   for (const btn of document.querySelectorAll('[data-back]')) {
     btn.addEventListener('click', () => navigate('home'));

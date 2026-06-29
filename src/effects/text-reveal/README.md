@@ -23,6 +23,6 @@ reveal.destroy();
 
 ## Herkunft
 
-`_raw/vendor/050096.app-bundle.js` — Hook `sR` (ab Z6940). Selektoren (Z6945/6948),
+Original-App-Bundle (nicht im Repo) — Hook `sR` (ab Z6940). Selektoren (Z6945/6948),
 SplitText-Optionen (Z6970), Reveal-Tween (Z7001) — jeder Wert mit Zeilennummer in
 der Config. Headings → Zeilen, übrige Ziele als Ganzes (1:1 zum Original).

@@ -13,8 +13,7 @@ export const CURSOR_CLASSES = Object.freeze({
 /** Worauf der SplitType-Cursor reagiert. */
 export const CURSOR_SELECTORS = Object.freeze({
   splitTrigger:
-      '[data-cursor-split-label]:not([aria-disabled="true"]), [data-cursor-arrow-only]:not([aria-disabled="true"]), .MW[data-tt]:not([aria-disabled="true"]), a[target="_blank"]:not([aria-disabled="true"]):not(.projects-zoom__link)',
-  splitLabelAttr: 'data-cursor-split-label',
+    '[data-cursor-split-label]:not([aria-disabled="true"]), [data-cursor-arrow-only]:not([aria-disabled="true"]), .MW[data-tt]:not([aria-disabled="true"]), a[target="_blank"]:not([aria-disabled="true"]):not(.projects-zoom__link)',
 });
 
 /** Custom-Events, über die der Cursor ferngesteuert wird. */
@@ -30,22 +29,18 @@ export const DEFAULT_CURSOR_OPTIONS = Object.freeze({
   /** Fallback-Label, wenn kein Datenattribut/aria/Text greift. */
   defaultLabel: 'Open',
 
-  /**
-   * `.mouse` SplitType-Stalker aus Paul-Seidel-Portfolio-main.zip:
-   * vendor/split/runtime-page-base.js `Hs` + main-app.js `writeFn`.
-   */
+  /** `.mouse` SplitType-Cursor: Folge-Tween + Schreib-Animation des Labels. */
   splitMouse: Object.freeze({
     follow: Object.freeze({ duration: 0.05, ease: 'none' }),
-    offset: Object.freeze({ x: 20, y: -8 }),
     swapDelay: 120,
     enterDelay: 1,
     hide: Object.freeze({ width: 0, duration: 0.15, ease: 'power2.out' }),
     write: Object.freeze({
       opacityDuration: 0.14,
       charStagger: 0.03,
-      blockDuration: 0.10,
+      blockDuration: 0.1,
       blockStagger: 0.03,
-      blockInnerStagger: 0.010,
+      blockInnerStagger: 0.01,
       ease: 'power4.inOut',
       fillers: 1,
       fillerText: ' ',
