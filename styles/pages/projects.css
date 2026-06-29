@@ -388,7 +388,7 @@
   grid-area: 1/2;
   justify-self: end;
   width: min(100%, 62vw, 980px, 160svh - 153.6px);
-  max-height: calc(100svh - 96px);
+  max-height: calc(100dvh - 96px);
   position: relative;
   overflow: hidden;
 }

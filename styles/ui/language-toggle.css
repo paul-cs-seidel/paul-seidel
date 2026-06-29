@@ -30,7 +30,7 @@
 
 @media (max-width: 620px) {
   .projects-zoom__header .lang-toggle button {
-    font-size: max(12px, min(3.529vw, 7.8px + 1.23515vw));
+    font-size: max(16px, min(3.529vw, 7.8px + 1.23515vw));
     line-height: 1;
   }
 }
