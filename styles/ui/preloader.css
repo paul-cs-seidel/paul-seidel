@@ -1,46 +1,18 @@
 /* UI — Preloader — aus hirotos.com (0g5_3bp05.l8k.css), unverändert. */
 
-/*
- * Edge-to-Edge waehrend des Ladens: Solange noch nicht "betreten" (is-entered),
- * ist der Seitenhintergrund dunkel wie der Loader. So ist auch die Safe Area
- * hinter der iOS-Statusleiste/Home-Indicator dunkel — der Loader wirkt komplett
- * randlos, statt oben/unten einen weissen Streifen zu zeigen. Nach dem Laden
- * faellt die Regel weg und der Hintergrund ist wieder hell (var(--background)).
- */
-
-
 .preloader {
   z-index: 20;
   place-items: center;
-  /*
-   * Edge-to-Edge: inset: 0 — der Preloader geht bis hinter Notch und
-   * Home-Indicator. WICHTIG: KEIN Padding hier. Die Wellen-<svg> ist
-   * `position:absolute; inset:0` und würde sonst nur die PADDING-Box füllen
-   * (abspos inset bezieht sich auf die Padding-Box) → ein heller Streifen hinter
-   * der Statusleiste bliebe übrig. Der Text ist zentriert und damit ohnehin
-   * safe; den Safe-Area-Abstand übernimmt .preloader__inner.
-   */
-  position: fixed;
+  position: absolute;
   inset: 0;
-  top: 0;
 }
 
 .preloader__wave {
   z-index: 0;
   width: 100%;
-  min-height: 100dvh;
-  display: block;
+  min-height: 100%;
   position: absolute;
   inset: 0;
-  pointer-events: none;
-}
-
-.preloader__inner {
-  z-index: 1;
-  place-items: center;
-  min-height: 1.4em;
-  display: grid;
-  position: relative;
 }
 
 .preloader__text {
