@@ -371,7 +371,9 @@
 }
 
 .projects-zoom__header {
-  top: var(--ui-gutter-y);
+  /* Gleiche Edge-Tokens wie page-shell / gridzoom: links var(--ui-edge-x),
+     oben var(--ui-edge-y-top) (inkl. Safe-Area) → Header überall garantiert bündig. */
+  top: var(--ui-edge-y-top);
   left: var(--ui-edge-x);
   z-index: 2;
   grid-template-columns: auto auto;
@@ -590,10 +592,9 @@
 }
 
 @media (max-width: 620px) {
-  .projects-gridzoom {
-    --projects-grid-padding-x: 18px;
-    padding: 18px;
-  }
+  /* Kein 18px-Hardcode mehr: --projects-grid-padding-x bleibt var(--ui-edge-x)
+     (Basisregel), damit der Header links exakt bündig mit page-shell (about/
+     contact) und dem Zoom-Header sitzt. */
   .projects-gridzoom__intro {
     width: min(max(360px, 234px + 29.6471vw), 100%);
     margin-top: clamp(56px, 9vh, 76px);
@@ -614,16 +615,16 @@
        inset:0 (Basisregel) wuerde die GROSSE Viewport-Hoehe nehmen → kein Scroll. */
     inset: 0 0 auto 0;
     height: 100dvh;
-    padding: 18px;
-    padding-bottom: max(18px, calc(env(safe-area-inset-bottom, 0px) + 28px));
+    /* Horizontale + obere Edge-Tokens aus der Basisregel beibehalten (var(--ui-edge-x)),
+       damit der Zoom-Header links bündig mit allen anderen Seiten sitzt.
+       Nur padding-bottom für den scrollbaren Safe-Area-Abschluss überschreiben. */
+    padding-bottom: max(var(--ui-edge-y-bottom), calc(env(safe-area-inset-bottom, 0px) + 28px));
     display: block;
     overflow: hidden auto;
     overscroll-behavior: contain;
   }
-  .projects-zoom__header {
-    top: 18px;
-    left: 18px;
-  }
+  /* Zoom-Header behält die Basiswerte (top: var(--ui-edge-y-top),
+     left: var(--ui-edge-x)) — kein 18px-Hardcode → bündig mit allen Seiten. */
   .projects-zoom__image {
     aspect-ratio: 16/9;
     width: 100%;
