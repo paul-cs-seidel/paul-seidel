@@ -21,6 +21,29 @@ npm run format        # Prettier (schreibt)
 npm run format:check  # Prettier (nur prüfen)
 ```
 
+## Deployment
+
+Statischer Build, optimiert für **Cloudflare Pages** (oder Netlify — gleiche
+`_headers`/`_redirects`-Konvention).
+
+- **Build-Befehl:** `npm run build`
+- **Output-Verzeichnis:** `dist`
+- **Node-Version:** siehe `.nvmrc` (20)
+
+Mitgelieferte Deploy-Artefakte in `public/` (werden 1:1 nach `dist/` kopiert):
+
+| Datei                                              | Zweck                                                    |
+| -------------------------------------------------- | -------------------------------------------------------- |
+| `robots.txt`, `sitemap.xml`                        | Crawling/SEO (Domain: `paul-seidel.com`)                 |
+| `_headers`                                         | Security-Header + CSP, immutable Caching für `/assets/*` |
+| `_redirects`                                       | SPA-Fallback auf `index.html`                            |
+| `favicon.svg`, `favicon-32.png`                    | Tab-Icon (PS-Monogramm)                                  |
+| `apple-touch-icon.png`                             | iOS-Home-Screen-Icon (180×180)                           |
+| `icon-192.png`, `icon-512.png`, `site.webmanifest` | PWA-Manifest                                             |
+
+Umgebungsvariablen: `.env.example` nach `.env` kopieren (gitignored). Aktuell ist
+die Seite rein statisch; echte Secrets kommen erst mit der Kontaktformular-Phase.
+
 ## Struktur
 
 ```
