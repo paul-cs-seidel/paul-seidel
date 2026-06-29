@@ -45,7 +45,8 @@ const gallery = mountGallery(galleryRoot, {
   onHover:  (id) => (id ? readout.show(id) : readout.hide()),
   onSelect: (id, el) => zoom.open(id, el),
 });
-gallery.freeze(true);                          // Scroll stoppen bis Projects-Panel aktiv ist
+gallery.freeze(true);
+// Scroll stoppen bis Projects-Panel aktiv ist
 
 // Fractal-Glas-Effekt auf den Grid-Bildern (Hover am Desktop, Touch am Handy).
 // Lazy: der WebGL-Kontext entsteht erst beim Beruehren/Hovern eines Bildes und

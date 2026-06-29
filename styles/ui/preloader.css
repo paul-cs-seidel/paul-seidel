@@ -39,9 +39,6 @@
   z-index: 1;
   place-items: center;
   min-height: 1.4em;
-  /* Safe-Area-Abstand jetzt hier (statt auf .preloader), damit die Welle
-     darüber edge-to-edge bleibt. Hält den Text aus Notch/Home-Indicator. */
-
   display: grid;
   position: relative;
 }

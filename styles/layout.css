@@ -179,7 +179,6 @@
   pointer-events: none;
   transform-origin: top;
   will-change: transform, opacity;
-  min-height: 100dvh;
   position: relative;
 }
 
