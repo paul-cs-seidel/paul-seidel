@@ -7,18 +7,10 @@
  * randlos, statt oben/unten einen weissen Streifen zu zeigen. Nach dem Laden
  * faellt die Regel weg und der Hintergrund ist wieder hell (var(--background)).
  */
-html:not(.is-entered) {
-  background: #050505;
-}
-html:not(.is-entered) body {
-  background: #050505;
-}
+
 
 .preloader {
   z-index: 20;
-  color: #ffffffeb;
-  transform-origin: bottom;
-  background: #050505;
   place-items: center;
   /*
    * Edge-to-Edge: inset: 0 — der Preloader geht bis hinter Notch und
@@ -28,16 +20,16 @@ html:not(.is-entered) body {
    * der Statusleiste bliebe übrig. Der Text ist zentriert und damit ohnehin
    * safe; den Safe-Area-Abstand übernimmt .preloader__inner.
    */
-  display: grid;
   position: fixed;
   inset: 0;
-  overflow: hidden;
+  top: 0;
+  min-height: 100dvh;
 }
 
 .preloader__wave {
   z-index: 0;
   width: 100%;
-  height: 100%;
+  min-height: 100dvh;
   display: block;
   position: absolute;
   inset: 0;
@@ -50,8 +42,7 @@ html:not(.is-entered) body {
   min-height: 1.4em;
   /* Safe-Area-Abstand jetzt hier (statt auf .preloader), damit die Welle
      darüber edge-to-edge bleibt. Hält den Text aus Notch/Home-Indicator. */
-  padding: max(env(safe-area-inset-top, 0px), env(safe-area-inset-bottom, 0px))
-           max(env(safe-area-inset-right, 0px), env(safe-area-inset-left, 0px));
+
   display: grid;
   position: relative;
 }

@@ -25,4 +25,7 @@
   --ui-edge-x-right: max(var(--ui-gutter-x), var(--safe-right));
   --ui-edge-y-top: max(var(--ui-gutter-y), var(--safe-top));
   --ui-edge-y-bottom: max(var(--ui-gutter-y), var(--safe-bottom));
+
+  --screenWidth: tan(atan2(var(--_w), 1px));
+  --screenHeight: tan(atan2(var(--_h), 1px));
 }

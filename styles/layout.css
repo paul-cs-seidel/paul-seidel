@@ -6,7 +6,7 @@
 }
 
 .experience-page {
-  z-index: 3;
+  z-index: 0;
   opacity: 0;
   pointer-events: none;
   position: fixed;
@@ -25,7 +25,6 @@
 
 .experience-page--projects {
   overscroll-behavior: contain;
-  background: #f7f5ef;
   overflow: hidden;
 }
 
@@ -33,7 +32,6 @@
 .experience-page--contact {
   color: #0b0b0a;
   pointer-events: auto;
-  background: #fff;
 }
 
 /* Kopfzeile je Panel: Back-Button + Sprachumschalter nebeneinander. */
@@ -44,7 +42,6 @@
 }
 
 .page-shell {
-  height: 100svh;
   height: 100dvh;
   padding-top:    var(--ui-edge-y-top);
   padding-bottom: var(--ui-edge-y-bottom);
@@ -80,7 +77,6 @@
 }
 
 .content-section {
-  min-height: 100svh;
   padding: clamp(24px, 6vw, 88px) var(--ui-edge-x);
   align-items: end;
   display: grid;
@@ -121,7 +117,6 @@
 
 .home-transition-page {
   background: var(--background);
-  min-height: 100svh;
   color: var(--foreground);
 }
 
@@ -184,7 +179,7 @@
   pointer-events: none;
   transform-origin: top;
   will-change: transform, opacity;
-  min-height: 100svh;
+  min-height: 100dvh;
   position: relative;
 }
 
