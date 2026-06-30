@@ -4,6 +4,9 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  /* Gleiche Viewport-Verankerung wie der Root-Hero (base.css) → identische Rahmung,
+     nahtloser Übergang an den Safe-Area-Kanten. z-index:0 hält den mix-blend der Texte. */
+  background-attachment: fixed;
   position: relative;
   overflow: hidden;
   z-index: 0;

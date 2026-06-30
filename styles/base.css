@@ -8,6 +8,29 @@ html {
   width: 100%;
   min-height: 100dvh;
   overflow: hidden;
+  /* Der Root-Hintergrund ist auf iOS Safari das EINZIGE, das die physischen Kanten
+     erreicht (fixed-Layer werden auf die Safe-Area geklemmt). Er bekommt pro Seite
+     genau die Kantenfarbe(n) — der Inhalt deckt die Mitte ab. Default dunkel = Loader. */
+  background-color: #050505;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* Andere Seiten: obere + untere Kante weiß. is-entered-Guard hält den Loader dunkel. */
+html.is-entered:has(.persistent-experience[data-route='projects']),
+html.is-entered:has(.persistent-experience[data-route='about']),
+html.is-entered:has(.persistent-experience[data-route='contact']) {
+  background-image: none;
+  background-color: #fff;
+}
+
+/* Home: obere Kante weiß (heller Hero-Hintergrund), untere Kante T-Shirt-dunkel.
+   Der Split (50 %) liegt in der Mitte, die der Hero (.hero-section) verdeckt —
+   sichtbar bleiben nur die Ober- und Unterkante. */
+html.is-entered:has(.persistent-experience[data-route='home']) {
+  background-color: #fff;
+  background-image: linear-gradient(to bottom, #fff 0%, #fff 50%, #1a1a1a 50%, #1a1a1a 100%);
+  background-size: 100% 100%;
 }
 
 body {
