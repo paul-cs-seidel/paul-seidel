@@ -1,5 +1,6 @@
 // ── Navigation zwischen den Panels (Home / Projects / About / Contact) ────────
 import { mount as mountTextReveal } from '../effects/text-reveal/text-reveal.js';
+import { mount as mountGlitchTitle } from '../effects/glitch-title/glitch-title.js';
 
 export function createRouter({ panels, pageTransition, gallery, readout }) {
   const persistent = document.querySelector('.persistent-experience');
@@ -13,11 +14,16 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
   // bei jeder Navigation verwaist liegen zu lassen.
   const reveals = new Map();
 
+  // Glitch-Titel lebt nur auf dem Contact-Panel: beim Betreten mounten, mitten
+  // im Wischer enthüllen, beim Verlassen den WebGL-Kontext wieder freigeben.
+  const glitchTitles = new Map();
+
   async function navigate(route) {
     if (busy || route === currentRoute || !panels.has(route)) return;
     busy = true;
     readout.hide();
 
+    const leavingRoute = currentRoute;
     const leavingProjects = currentRoute === 'projects';
     const enteringProjects = route === 'projects';
 
@@ -30,6 +36,7 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
     // Controller für den Text-Reveal des Zielpanels direkt aufheben,
     // damit onContentReveal ihn ohne Map-Lookup sicher ansprechen kann.
     let pendingReveal = null;
+    let pendingGlitch = null;
 
     await pageTransition.transition({
       snapshot,
@@ -59,6 +66,16 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
         reveals.get(route)?.destroy();
         pendingReveal = mountTextReveal(next, { autoplay: false });
         reveals.set(route, pendingReveal);
+
+        // Beim Verlassen von Contact dessen Glitch-Kontext freigeben; beim
+        // Betreten einen frischen mounten (autoplay:false → reveal in onContentReveal).
+        glitchTitles.get(leavingRoute)?.destroy();
+        glitchTitles.delete(leavingRoute);
+        if (route === 'contact') {
+          glitchTitles.get(route)?.destroy();
+          pendingGlitch = mountGlitchTitle(next, { autoplay: false });
+          glitchTitles.set(route, pendingGlitch);
+        }
       },
 
       // t = 1.55 s (contentRevealAt): Text-Reveal + Gallery-Enter gleichzeitig
@@ -66,6 +83,9 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
       onContentReveal: () => {
         pendingReveal?.reveal();
         pendingReveal = null;
+
+        pendingGlitch?.reveal();
+        pendingGlitch = null;
 
         if (enteringProjects) gallery?.enterCards();
       },

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "gsap": "^3.13.0",
+    "ogl": "^1.0.11",
     "split-type": "^0.3.4"
   },
   "devDependencies": {

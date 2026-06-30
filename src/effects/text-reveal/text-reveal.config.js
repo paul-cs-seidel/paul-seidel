@@ -5,7 +5,8 @@
 
 /** Ziel-Selektoren. Headings werden in Zeilen zerlegt, Rest als Ganzes. */
 export const TEXT_REVEAL_SELECTORS = Object.freeze({
-  heading: '[data-text-reveal-heading],.page-shell__intro > h1,.projects-gridzoom__intro > h1',
+  heading:
+    '[data-text-reveal-heading],.page-shell__intro > h1:not([data-glitch-title]),.projects-gridzoom__intro > h1',
   body: '[data-text-reveal],[data-text-reveal-kicker],.page-shell__intro > p,.about-language-toggle > button,.about-page__body,.about-page__meta > div,.home-meta > div,.contact-page__links,.projects-gridzoom__intro > p',
 });
 
