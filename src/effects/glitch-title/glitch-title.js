@@ -148,25 +148,39 @@ export function mount(container, options = {}) {
     fit();
   }
 
-  // ── Canvas auf die H1-Box legen + Text einpassen (ortho, 1:1 px) ────────────
+  // Abstand DOM-Textoberkante (H1-Box-Oberkante) → Baseline, in px.
+  let measureCtx = null;
+  function measureDomBaseline(fs) {
+    const cs = win.getComputedStyle(host);
+    const lhRaw = parseFloat(cs.lineHeight);
+    const lineHeight = Number.isFinite(lhRaw) ? lhRaw : fs * 1.2;
+    measureCtx ||= doc.createElement('canvas').getContext('2d');
+    measureCtx.font = `${cs.fontWeight} ${fs}px ${cs.fontFamily}`;
+    const m = measureCtx.measureText('Hxg');
+    const ascent = m.fontBoundingBoxAscent || fs * 0.8;
+    const descent = m.fontBoundingBoxDescent || fs * 0.2;
+    return (lineHeight - (ascent + descent)) / 2 + ascent;
+  }
+
+  // ── Canvas auf den Textblock legen + einpassen (ortho, 1:1 px) ──────────────
   function fit() {
     if (!renderer || !mesh) return;
     const hostRect = host.getBoundingClientRect();
     const stageRect = stage.getBoundingClientRect();
     const fs = mesh.fontSizePx;
-    const padX = cfg.padding.x * fs;
-    const padTop = cfg.padding.top * fs;
-    const padBottom = cfg.padding.bottom * fs;
+    const fsScaled = fs * cfg.sizeScale; // Polster/Lift skalieren mit der Textgröße
+    const padX = cfg.padding.x * fsScaled;
+    const padTop = cfg.padding.top * fsScaled;
+    const padBottom = cfg.padding.bottom * fsScaled;
 
-    // Auf H1-Breite skalieren (Text deckt die Überschrift exakt).
-    const targetW = Math.max(hostRect.width, 1);
-    const scale = mesh.textWidth > 0 ? targetW / mesh.textWidth : 1;
-    mesh.scale.set(scale, scale, 1);
-    const scaledH = mesh.textHeight * scale;
-    const size = fs * cfg.sizeScale;
+    // Größe steckt schon im Text (size = fs*sizeScale), kein Mesh-Scale.
+    mesh.scale.set(1, 1, 1);
+    const size = fsScaled;
+    const textW = mesh.textWidth;
+    const textH = mesh.textHeight;
 
-    const cw = Math.max(1, Math.round(targetW + 2 * padX));
-    const ch = Math.max(1, Math.round(scaledH + padTop + padBottom));
+    const cw = Math.max(1, Math.round(textW + 2 * padX));
+    const ch = Math.max(1, Math.round(textH + padTop + padBottom));
     const dpr = Math.min(win.devicePixelRatio || 1, cfg.dprMax);
     renderer.dpr = dpr;
     renderer.setSize(cw, ch);
@@ -178,18 +192,25 @@ export function mount(container, options = {}) {
     camera.bottom = -ch / 2;
     camera.orthographic();
 
-    // Textblock mit `padTop` unter der Canvas-Oberkante; viel Raum unten (Melt).
-    mesh.position.x = 0;
-    mesh.position.y = ch / 2 - padTop - 0.07 * size * scale;
+    // Textblock mit `padTop` unter der Canvas-Oberkante.
+    mesh.position.x = 0; // align:center → horizontal zentriert
+    mesh.baseY = ch / 2 - padTop - 0.07 * size;
+    mesh.position.y = mesh.baseY;
 
-    // Canvas so platzieren, dass das Textband exakt über der H1 sitzt.
+    // Vertikal an der BASELINE ausrichten, damit Effekt und Platzhalter exakt
+    // gleich liegen. MSDF-Baseline = padTop + size (aus den Font-Metriken, da
+    // common.base die Skalierung bestimmt). DOM-Baseline per measureText.
     const centerX = hostRect.left - stageRect.left + hostRect.width / 2;
-    const hostTop = hostRect.top - stageRect.top;
+    const hostTopRel = hostRect.top - stageRect.top;
+    const msdfBaselineFromTop = padTop + size;
+    const domBaselineFromTop = measureDomBaseline(fs);
     const canvas = gl.canvas;
     canvas.style.width = `${cw}px`;
     canvas.style.height = `${ch}px`;
-    canvas.style.left = `${centerX - cw / 2}px`;
-    canvas.style.top = `${hostTop - padTop}px`;
+    canvas.style.left = `${Math.round(centerX - cw / 2)}px`;
+    canvas.style.top = `${Math.round(
+      hostTopRel + domBaselineFromTop - msdfBaselineFromTop + cfg.offsetY,
+    )}px`;
 
     render();
   }
@@ -212,6 +233,7 @@ export function mount(container, options = {}) {
 
   // ── GSAP-Timelines (exakt aus `de`) ─────────────────────────────────────────
   function buildTimelines() {
+    // Reveal-Melt (wie am Anfang): uTime-Puls + uStart-Settle.
     animctr = gsap
       .timeline({ paused: true })
       .fromTo(
@@ -233,6 +255,7 @@ export function mount(container, options = {}) {
         0,
       );
 
+    // Hover-Melt, von der Cursor-Y gescrubbt.
     animmouse = gsap
       .timeline({ paused: true })
       .fromTo(
@@ -256,10 +279,12 @@ export function mount(container, options = {}) {
     animmouse.progress(0);
   }
 
-  // ── Pointer (vertikal), wie inFn/mvFn/lvFn im Original ───────────────────────
+  // ── Pointer (vertikal), wie inFn/mvFn/lvFn im Original. Listener an der H1
+  //    (Canvas ist pointer-events:none → blockiert die Links nicht); norm wird
+  //    aber über die Canvas-Box berechnet, damit der Melt unter dem Cursor sitzt.
   function bindPointer() {
     const yNorm = (event) => {
-      const rect = host.getBoundingClientRect();
+      const rect = gl.canvas.getBoundingClientRect();
       const y = event.clientY ?? rect.top + rect.height / 2;
       return clamp((y - rect.top) / Math.max(rect.height, 1), 0, 1);
     };
@@ -363,8 +388,8 @@ export function mount(container, options = {}) {
   // ── Öffentliche API ─────────────────────────────────────────────────────────
   async function reveal() {
     const ok = await init();
-    if (!ok || destroyed) return;
-    // Reveal = animctr einmal abspielen (uTime-Puls + uStart-Settle).
+    if (!ok || destroyed || !animctr) return;
+    // Reveal wie am Anfang: den Original-Melt (animctr) einmal abspielen.
     animctr.timeScale(1 / cfg.revealDuration).play(0);
   }
 

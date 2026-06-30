@@ -33,6 +33,15 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
     snapshot.removeAttribute('data-route-panel');
     Object.assign(snapshot.style, { position: 'absolute', inset: '0', opacity: '1' });
 
+    // Der geklonte Glitch-Canvas ist leer (kein GL) und der DOM-Text unsichtbar
+    // (is-glitch-ready) → im Schnappschuss würde die Überschrift „verschwinden".
+    // Darum im Klon den schlichten Text zeigen und den toten Canvas entfernen.
+    const snapGlitch = snapshot.querySelector('[data-glitch-title]');
+    if (snapGlitch) {
+      snapGlitch.classList.remove('is-glitch-ready', 'is-glitch-failed');
+      snapshot.querySelector('.glitch-title__canvas')?.remove();
+    }
+
     // Controller für den Text-Reveal des Zielpanels direkt aufheben,
     // damit onContentReveal ihn ohne Map-Lookup sicher ansprechen kann.
     let pendingReveal = null;

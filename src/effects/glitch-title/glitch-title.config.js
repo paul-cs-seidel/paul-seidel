@@ -3,8 +3,9 @@
  *
  * 1:1 portiert aus sanchezrebuild/Portfolio (Footer-Title `data-temp="foot"`,
  * Klasse `de`): Mesh-Shader Ai (Vertex) + Sh (MSDF-Fragment), Post-Shader Mh
- * (flüssiger tan()-Melt/Ripple). Animation über zwei GSAP-Timelines:
- *   animctr  — Reveal (uTime-Puls + uStart), beim Seitenwechsel gescrubbt.
+ * (flüssiger tan()-Melt/Ripple). Animation:
+ *   reveal   — statischer Wisch von unten nach oben (uReveal 0→1) + uTime-Puls;
+ *              Text bleibt an Ort und Größe.
  *   animmouse — Hover-Melt (uMouseT + uMouse), von der VERTIKALEN Cursor-
  *               Position gescrubbt (norm = y / höhe, gelerpt).
  * Flächen/Verhalten: ../../../styles/effects/glitch-title.css.
@@ -29,20 +30,21 @@ export const GLITCH_TITLE_ASSETS = Object.freeze({
 export const DEFAULT_GLITCH_TITLE_OPTIONS = Object.freeze({
   /** Textfarbe als Graustufe (Sh: vec3(uColor)). 0 = schwarz. */
   color: 0,
-  /** MSDF-Größe relativ zur gemessenen H1-Schriftgröße (px → Weltgröße). */
-  sizeScale: 1,
+  /** MSDF-Größe = H1-Schriftgröße × sizeScale. 1 = exakt so groß wie der
+   *  Platzhalter-Text. Größe ändert man über die CSS-font-size der H1. */
+  sizeScale: 0.98,
   /** Buchstabenabstand in em (Original-Footer data-l: -0.022). */
-  letterSpacing: -0.022,
-  /** Canvas-Polster um die H1-Box (×Schriftgröße) — unten mehr für den Melt. */
-  padding: Object.freeze({ x: 0.18, top: 0.32, bottom: 1.0 }),
-  /** Vertikale Lage des Textblocks im Canvas (0 = oben, 1 = unten). */
-  anchorY: 0.42,
-  dprMax: 2,
-  /** Reveal-Dauer (animctr wird darüber 0→1 gescrubbt). */
-  revealDuration: 1.5,
+  letterSpacing: -0.004,
+  /** Canvas-Polster um den Textblock (×Schriftgröße) — unten etwas Melt-Raum. */
+  padding: Object.freeze({ x: 3, top: 0.2, bottom: 0.4 }),
+  /** Feinjustierung der vertikalen Überlagerung in px (+ = runter, − = hoch). */
+  offsetY: -10,
+  dprMax: 10,
+  /** Reveal-Dauer (Wisch von unten nach oben). */
+  revealDuration: 1.2,
   /** Lerp-Faktoren für das Cursor-Tracking (Original: enter 0.02, leave 0.01). */
-  enterLerp: 0.02,
-  leaveLerp: 0.01,
+  enterLerp: 0.03,
+  leaveLerp: 0.03,
 });
 
 /* ── Shader: EXAKT aus main.js übernommen ─────────────────────────────────── */
