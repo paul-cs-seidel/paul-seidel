@@ -36,15 +36,15 @@ export const DEFAULT_GLITCH_TITLE_OPTIONS = Object.freeze({
   /** Buchstabenabstand in em (Original-Footer data-l: -0.022). */
   letterSpacing: -0.004,
   /** Canvas-Polster um den Textblock (×Schriftgröße) — unten etwas Melt-Raum. */
-  padding: Object.freeze({ x: 3, top: 0.2, bottom: 0.4 }),
+  padding: Object.freeze({ x: 2, top: 0.2, bottom: 0.4 }),
   /** Feinjustierung der vertikalen Überlagerung in px (+ = runter, − = hoch). */
-  offsetY: -10,
+  offsetY: -9,
   dprMax: 10,
   /** Reveal-Dauer (Wisch von unten nach oben). */
-  revealDuration: 1.2,
+  revealDuration: 1.6,
   /** Lerp-Faktoren für das Cursor-Tracking (Original: enter 0.02, leave 0.01). */
   enterLerp: 0.03,
-  leaveLerp: 0.03,
+  leaveLerp: 0.02,
 });
 
 /* ── Shader: EXAKT aus main.js übernommen ─────────────────────────────────── */

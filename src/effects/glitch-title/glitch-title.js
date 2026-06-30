@@ -194,7 +194,7 @@ export function mount(container, options = {}) {
 
     // Textblock mit `padTop` unter der Canvas-Oberkante.
     mesh.position.x = 0; // align:center → horizontal zentriert
-    mesh.baseY = ch / 2 - padTop - 0.07 * size;
+    mesh.baseY = ch / 2 - padTop - 0.085 * size;
     mesh.position.y = mesh.baseY;
 
     // Vertikal an der BASELINE ausrichten, damit Effekt und Platzhalter exakt
@@ -207,7 +207,7 @@ export function mount(container, options = {}) {
     const canvas = gl.canvas;
     canvas.style.width = `${cw}px`;
     canvas.style.height = `${ch}px`;
-    canvas.style.left = `${Math.round(centerX - cw / 2)}px`;
+    canvas.style.left = `${Math.round(centerX - cw / 1.992)}px`;
     canvas.style.top = `${Math.round(
       hostTopRel + domBaselineFromTop - msdfBaselineFromTop + cfg.offsetY,
     )}px`;
