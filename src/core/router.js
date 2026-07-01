@@ -1,19 +1,30 @@
 // ── Navigation zwischen den Panels (Home / Projects / About / Contact) ────────
 import { mount as mountTextReveal } from '../effects/text-reveal/text-reveal.js';
+import { mount as mountGlitchTitle } from '../effects/glitch-title/glitch-title.js';
 
 export function createRouter({ panels, pageTransition, gallery, readout }) {
   const persistent = document.querySelector('.persistent-experience');
-  const navLinks   = [...document.querySelectorAll('.site-nav a[data-route]')];
+  const navLinks = [...document.querySelectorAll('.site-nav a[data-route]')];
 
   let currentRoute = 'home';
   let busy = false;
+
+  // Pro Panel den zuletzt gemounteten Text-Reveal merken, damit ein erneuter
+  // Besuch den alten Controller (SplitText + Tweens) sauber abbaut, statt ihn
+  // bei jeder Navigation verwaist liegen zu lassen.
+  const reveals = new Map();
+
+  // Glitch-Titel lebt nur auf dem Contact-Panel: beim Betreten mounten, mitten
+  // im Wischer enthüllen, beim Verlassen den WebGL-Kontext wieder freigeben.
+  const glitchTitles = new Map();
 
   async function navigate(route) {
     if (busy || route === currentRoute || !panels.has(route)) return;
     busy = true;
     readout.hide();
 
-    const leavingProjects  = currentRoute === 'projects';
+    const leavingRoute = currentRoute;
+    const leavingProjects = currentRoute === 'projects';
     const enteringProjects = route === 'projects';
 
     // Snapshot des aktuellen Panels als Übergangsbild klonen.
@@ -22,9 +33,19 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
     snapshot.removeAttribute('data-route-panel');
     Object.assign(snapshot.style, { position: 'absolute', inset: '0', opacity: '1' });
 
+    // Der geklonte Glitch-Canvas ist leer (kein GL) und der DOM-Text unsichtbar
+    // (is-glitch-ready) → im Schnappschuss würde die Überschrift „verschwinden".
+    // Darum im Klon den schlichten Text zeigen und den toten Canvas entfernen.
+    const snapGlitch = snapshot.querySelector('[data-glitch-title]');
+    if (snapGlitch) {
+      snapGlitch.classList.remove('is-glitch-ready', 'is-glitch-failed');
+      snapshot.querySelector('.glitch-title__canvas')?.remove();
+    }
+
     // Controller für den Text-Reveal des Zielpanels direkt aufheben,
     // damit onContentReveal ihn ohne Map-Lookup sicher ansprechen kann.
     let pendingReveal = null;
+    let pendingGlitch = null;
 
     await pageTransition.transition({
       snapshot,
@@ -50,7 +71,20 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
 
         // Text-Reveal mit autoplay:false mounten → Texte werden sofort durch
         // gsap.set() unsichtbar gemacht. reveal() folgt in onContentReveal.
+        // Vorherigen Reveal desselben Panels zuvor abbauen.
+        reveals.get(route)?.destroy();
         pendingReveal = mountTextReveal(next, { autoplay: false });
+        reveals.set(route, pendingReveal);
+
+        // Beim Verlassen von Contact dessen Glitch-Kontext freigeben; beim
+        // Betreten einen frischen mounten (autoplay:false → reveal in onContentReveal).
+        glitchTitles.get(leavingRoute)?.destroy();
+        glitchTitles.delete(leavingRoute);
+        if (route === 'contact') {
+          glitchTitles.get(route)?.destroy();
+          pendingGlitch = mountGlitchTitle(next, { autoplay: false });
+          glitchTitles.set(route, pendingGlitch);
+        }
       },
 
       // t = 1.55 s (contentRevealAt): Text-Reveal + Gallery-Enter gleichzeitig
@@ -58,6 +92,9 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
       onContentReveal: () => {
         pendingReveal?.reveal();
         pendingReveal = null;
+
+        pendingGlitch?.reveal();
+        pendingGlitch = null;
 
         if (enteringProjects) gallery?.enterCards();
       },
@@ -74,7 +111,10 @@ export function createRouter({ panels, pageTransition, gallery, readout }) {
   }
 
   for (const link of navLinks) {
-    link.addEventListener('click', (e) => { e.preventDefault(); navigate(link.dataset.route); });
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigate(link.dataset.route);
+    });
   }
   for (const btn of document.querySelectorAll('[data-back]')) {
     btn.addEventListener('click', () => navigate('home'));

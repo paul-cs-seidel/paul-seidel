@@ -1,18 +1,18 @@
 import gsap from 'gsap';
 import Flip from 'gsap/Flip';
 
-import { mount as mountCursor }     from './effects/custom-cursor/custom-cursor.js';
-import { mount as mountPreloader }  from './effects/preloader/preloader.js';
+import { mount as mountCursor } from './effects/custom-cursor/custom-cursor.js';
+import { mount as mountPreloader } from './effects/preloader/preloader.js';
 import { mount as mountTransition } from './effects/page-transition/page-transition.js';
 import { mount as mountTextReveal } from './effects/text-reveal/text-reveal.js';
-import { mount as mountGallery }    from './effects/projects-gallery/projects-gallery.js';
-import { mount as mountFractal }    from './effects/fractal-effect/fractal-effect.js';
+import { mount as mountGallery } from './effects/projects-gallery/projects-gallery.js';
+import { mount as mountFractal } from './effects/fractal-effect/fractal-effect.js';
 
-import { PROJECTS }       from './data/projects.js';
-import { createReadout }  from './ui/readout.js';
+import { PROJECTS } from './data/projects.js';
+import { createReadout } from './ui/readout.js';
 import { createLanguage } from './core/language.js';
-import { createZoom }     from './core/zoom.js';
-import { createRouter }   from './core/router.js';
+import { createZoom } from './core/zoom.js';
+import { createRouter } from './core/router.js';
 
 gsap.registerPlugin(Flip);
 
@@ -29,20 +29,20 @@ const pageTransition = mountTransition(document.body);
 // ab und ist nicht zu sehen.
 const homeReveal = mountTextReveal(panels.get('home'), { autoplay: false });
 mountPreloader(document.body, {
-  heroImage: '/assets/Hero.png',        // Welle drained direkt aufs Hero-Bild
-  onClose: () => homeReveal.reveal(),   // Reveal startet, sobald der Loader schließt
+  heroImage: '/assets/Hero.png', // Welle drained direkt aufs Hero-Bild
+  onClose: () => homeReveal.reveal(), // Reveal startet, sobald der Loader schließt
 });
 
 // ── Sprache + Readout ─────────────────────────────────────────────────────────
 const language = createLanguage();
-const readout  = createReadout(() => language.lang);
+const readout = createReadout(() => language.lang);
 
 // ── Gallery VOR dem ersten Navigate aufbauen (Bilder vorladen) ────────────────
 let zoom;
 const galleryRoot = panels.get('projects').querySelector('[data-gallery-root]');
 const gallery = mountGallery(galleryRoot, {
   projects: PROJECTS.map((p) => ({ id: p.id, image: p.image })),
-  onHover:  (id) => (id ? readout.show(id) : readout.hide()),
+  onHover: (id) => (id ? readout.show(id) : readout.hide()),
   onSelect: (id, el) => zoom.open(id, el),
 });
 gallery.freeze(true);
@@ -56,5 +56,8 @@ mountFractal(galleryRoot, { lazy: true });
 
 // ── Zoom + Routing verdrahten ─────────────────────────────────────────────────
 zoom = createZoom({ getLang: () => language.lang, gallery, readout });
-language.onChange(() => { readout.refresh(); zoom.refill(); });
+language.onChange(() => {
+  readout.refresh();
+  zoom.refill();
+});
 createRouter({ panels, pageTransition, gallery, readout });

@@ -9,3 +9,15 @@
 /dataSources/
 /node_modules
 .idea
+
+# Build output
+/dist
+
+# OS / editor cruft
+.DS_Store
+*.log
+
+# Local env (.env.example bleibt getrackt)
+.env
+.env.local
+.env.*.local

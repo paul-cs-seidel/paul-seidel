@@ -1,43 +1,38 @@
 # custom-cursor
 
-Hirotos Cursor plus Paul-Seidels `.mouse`-Split-Stalker, framework-frei aus den
-Vendor-Bundles rekonstruiert
-und in **Engine** (`custom-cursor.js`) + **Einstellungen** (`custom-cursor.config.js`)
-getrennt. Stilfläche/Maße liegen in `../../styles/ui/cursor.css`.
+Der `.mouse`-SplitType-Cursor, getrennt in **Engine** (`custom-cursor.js`) +
+**Einstellungen** (`custom-cursor.config.js`). Stilfläche/Maße liegen in
+`../../styles/ui/cursor.css`.
 
-| Teil | Klasse | Verhalten |
-| --- | --- | --- |
-| mouse-stalker | `.mouse-stalker` | Folgt dem Zeiger; klappt beim Hovern von `[data-cursor-stalker-label]` zu einer Label-Pille mit Pfeil auf. |
-| split-mouse | `.mouse` | Folgt `.MW[data-tt]`/`[data-cursor-split-label]`; zeigt den SplitType-Kasten aus `Paul-Seidel-Portfolio-main.zip` und feuert den `.Oi`-Hover an. |
-| sticker-preview | `.sticker-cursor-preview` | Großes Vorschaubild, per Event ein-/ausgeblendet. |
+> Hinweis: Die ursprüngliche Stalker-Pille und die Sticker-Preview wurden
+> entfernt — übrig ist nur der `.mouse`-Cursor unten.
+
+| Teil        | Klasse   | Verhalten                                                                                                                                                                                                                          |
+| ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| split-mouse | `.mouse` | Folgt dem Zeiger; öffnet beim Hovern eines Triggers (`[data-cursor-split-label]`, `[data-cursor-arrow-only]`, `.MW[data-tt]`, `a[target="_blank"]`) einen animierten SplitType-Label-Kasten und feuert den `.Oi`-Fractal-Hover an. |
 
 ## API
 
 ```js
 import { mount } from './custom-cursor.js';
-const cursor = mount(document.body);        // baut beide Elemente, verdrahtet GSAP + Events
-cursor.destroy();                           // Listener (AbortController) + Tweens + DOM weg
+const cursor = mount(document.body); // baut .mouse, verdrahtet GSAP + Events
+cursor.destroy(); // Listener (AbortController) + Tweens + DOM weg
 ```
 
 - Nur `pointer: fine` (Touch/Stift bleiben unberührt); CSS setzt `pointer-events: none`.
-- Antrieb: **GSAP** (`gsap`, Projekt-Abhängigkeit) — exakt wie im Original.
+- Antrieb: **GSAP** (`gsap`, Projekt-Abhängigkeit) + **SplitType** (`split-type`).
+- Default-Label, wenn kein Attribut/aria/Text greift: `Open`.
 
-## Fernsteuerung (Events)
+## Events
 
-| Event | Wirkung |
-| --- | --- |
-| `signal-pole:cursor-enter` `{label, showArrow?}` | Pille mit Label erzwingen. |
-| `signal-pole:cursor-leave` / `:cursor-reset` | Pille zurücksetzen. |
-| `signal-pole:sticker-preview-enter` `{url}` | Vorschaubild zeigen. |
-| `signal-pole:sticker-preview-leave` | Vorschaubild ausblenden. |
-| `signal-pole:fractal-hover-enter` / `:fractal-hover-leave` `{target}` | Wird vom `.mouse`-Cursor fuer `.Oi`-Hosts ausgesendet. |
+| Event                                          | Richtung  | Wirkung                                                                  |
+| ---------------------------------------------- | --------- | ------------------------------------------------------------------------ |
+| `signal-pole:cursor-reset`                     | eingehend | Label-Kasten zurücksetzen/ausblenden.                                    |
+| `signal-pole:fractal-hover-enter` `{ target }` | ausgehend | Vom `.mouse`-Cursor für `.Oi`-Hosts ausgesendet (steuert fractalEffect). |
+| `signal-pole:fractal-hover-leave` `{ target }` | ausgehend | Gegenstück zum Enter.                                                    |
 
-## Herkunft (Original)
+## Herkunft
 
-`_raw/vendor/050096.app-bundle.js` — React-Komponenten `wu` (mouse-stalker, ab Z59465)
-und `wh` (sticker-cursor-preview, ab Z59666). Jeder Wert in `custom-cursor.config.js`
-trägt seine Original-Zeilennummer. Default-Label `wl = 'Open'` (Z59464).
-
-`/Users/paulseidel/Downloads/Paul-Seidel-Portfolio-main.zip` —
-`vendor/split/runtime-page-base.js` (`Hs`) und `vendor/split/main-app.js`
-(`writeFn`) fuer `.mouse`, `.mouse_el`, `.Awrite-inv`, `.Ms`.
+Rekonstruiert aus dem ursprünglichen Paul-Seidel-Portfolio-Bundle (nicht im
+Repo): `.mouse`/`.mouse_el`/`.Awrite`-Markup und die Schreib-Animation
+(`writeFn`). Jeder Wert in `custom-cursor.config.js` ist dort verortet.

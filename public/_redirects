@@ -1,0 +1,2 @@
+# SPA-Fallback: unbekannte Pfade liefern index.html (statische Dateien gehen vor).
+/*    /index.html   200

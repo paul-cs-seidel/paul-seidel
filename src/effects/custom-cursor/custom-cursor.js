@@ -1,6 +1,6 @@
 /*
- * custom-cursor — nur der .mouse SplitType-Stalker.
- * Stalker-Pille und Sticker-Preview wurden entfernt.
+ * custom-cursor — der .mouse SplitType-Cursor (animierter Label-Kasten,
+ * folgt dem Zeiger und feuert den `.Oi`-Fractal-Hover an).
  */
 import gsap from 'gsap';
 import SplitType from 'split-type';
@@ -11,8 +11,6 @@ import {
   CURSOR_SELECTORS,
   DEFAULT_CURSOR_OPTIONS,
 } from './custom-cursor.config.js';
-
-const clamp = (value, min, max) => Math.max(min, Math.min(value, max)); // eslint-disable-line no-unused-vars
 
 function mergeOptions(options) {
   return {
@@ -48,16 +46,18 @@ function setupSplitMouse(nodes, cfg, signal, win) {
   const labelFor = (target) => {
     if (target.hasAttribute('data-cursor-arrow-only')) return '↗';
     return (
-        target.dataset.cursorSplitLabel?.trim() ||
-        target.dataset.tt?.trim() ||
-        target.getAttribute('aria-label')?.trim() ||
-        target.textContent?.replace(/\s+/g, ' ').trim() ||
-        cfg.defaultLabel
+      target.dataset.cursorSplitLabel?.trim() ||
+      target.dataset.tt?.trim() ||
+      target.getAttribute('aria-label')?.trim() ||
+      target.textContent?.replace(/\s+/g, ' ').trim() ||
+      cfg.defaultLabel
     );
   };
 
   const fractalTargetFor = (target) =>
-      target.matches?.('.Oi') ? target : target.querySelector?.('.Oi') || target.closest?.('.Oi') || target;
+    target.matches?.('.Oi')
+      ? target
+      : target.querySelector?.('.Oi') || target.closest?.('.Oi') || target;
 
   const dispatchFractal = (type, target) => {
     win.dispatchEvent(new CustomEvent(type, { detail: { target: fractalTargetFor(target) } }));
@@ -153,23 +153,32 @@ function setupSplitMouse(nodes, cfg, signal, win) {
         },
       });
       showTl.to(
-          child,
-          {
-            width,
-            duration: Math.max(s.write.opacityDuration, chars.length * s.write.charStagger + s.write.blockDuration),
-            ease: s.write.ease,
-          },
-          0,
+        child,
+        {
+          width,
+          duration: Math.max(
+            s.write.opacityDuration,
+            chars.length * s.write.charStagger + s.write.blockDuration,
+          ),
+          ease: s.write.ease,
+        },
+        0,
       );
       for (const [index, char] of chars.entries()) {
         const normal = char.querySelector('.n');
         showTl.to(
-            normal,
-            { opacity: 1, duration: s.write.opacityDuration, immediateRender: false, ease: s.write.ease },
-            index * s.write.charStagger,
+          normal,
+          {
+            opacity: 1,
+            duration: s.write.opacityDuration,
+            immediateRender: false,
+            ease: s.write.ease,
+          },
+          index * s.write.charStagger,
         );
         for (const [fillerIndex, filler] of [...char.querySelectorAll('.f')].entries()) {
-          showTl.to(
+          showTl
+            .to(
               filler,
               {
                 scaleX: 0,
@@ -179,13 +188,16 @@ function setupSplitMouse(nodes, cfg, signal, win) {
                 ease: s.write.ease,
               },
               index * s.write.blockStagger + (1 + fillerIndex) * s.write.blockInnerStagger,
-          ).set(filler, { display: 'none' }, '>');
+            )
+            .set(filler, { display: 'none' }, '>');
         }
       }
     }, delay);
   };
 
-  const onPointerMove = (event) => { position(event); };
+  const onPointerMove = (event) => {
+    position(event);
+  };
   const onPointerOver = (event) => {
     const target = event.target?.closest(CURSOR_SELECTORS.splitTrigger);
     if (!target || target === currentTarget) return;
@@ -238,7 +250,11 @@ export function mount(root = globalThis.document?.body, options = {}) {
   // Touch-/Stiftgeräte: keine Listener
   const fine = win.matchMedia?.(cfg.pointerQuery).matches ?? true;
   if (!fine) {
-    return { destroy() { splitMouse.el.remove(); } };
+    return {
+      destroy() {
+        splitMouse.el.remove();
+      },
+    };
   }
 
   const controller = new AbortController();

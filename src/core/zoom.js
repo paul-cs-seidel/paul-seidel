@@ -6,7 +6,7 @@ import { PROJECTS, byId } from '../data/projects.js';
 import { mount as mountFractalEffect } from '../effects/fractal-effect/fractal-effect.js';
 
 const ZOOM_LABELS = {
-  en: { category: 'Category',  role: 'Role',  view: 'View site'     },
+  en: { category: 'Category', role: 'Role', view: 'View site' },
   de: { category: 'Kategorie', role: 'Rolle', view: 'Live Webseite' },
 };
 
@@ -43,24 +43,24 @@ export function createZoom({ getLang, gallery, readout }) {
 
   const els = {
     imageHost: zoom.querySelector('.projects-zoom__image'),
-    image:     zoom.querySelector('[data-zoom-image]'),
-    category:  zoom.querySelector('[data-zoom-category]'),
-    title:     zoom.querySelector('[data-zoom-title]'),
-    summary:   zoom.querySelector('[data-zoom-summary]'),
-    cat:       zoom.querySelector('[data-zoom-cat]'),
-    role:      zoom.querySelector('[data-zoom-role]'),
-    link:      zoom.querySelector('[data-zoom-link]'),
-    map:       zoom.querySelector('.projects-zoom__map'),
+    image: zoom.querySelector('[data-zoom-image]'),
+    category: zoom.querySelector('[data-zoom-category]'),
+    title: zoom.querySelector('[data-zoom-title]'),
+    summary: zoom.querySelector('[data-zoom-summary]'),
+    cat: zoom.querySelector('[data-zoom-cat]'),
+    role: zoom.querySelector('[data-zoom-role]'),
+    link: zoom.querySelector('[data-zoom-link]'),
+    map: zoom.querySelector('.projects-zoom__map'),
   };
 
   let currentId = null;
-  let fractal   = null;
+  let fractal = null;
 
   // ── Projekt-Map (Thumbnails unten rechts) ──────────────────────────────────
   function buildMap() {
     els.map.innerHTML = '';
     PROJECTS.forEach((p) => {
-      const li  = document.createElement('li');
+      const li = document.createElement('li');
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.setAttribute('aria-current', 'false');
@@ -69,7 +69,9 @@ export function createZoom({ getLang, gallery, readout }) {
       img.alt = p.title;
       img.loading = 'eager';
       btn.append(img);
-      btn.addEventListener('click', () => { if (currentId !== p.id) switchTo(p.id); });
+      btn.addEventListener('click', () => {
+        if (currentId !== p.id) switchTo(p.id);
+      });
       li.append(btn);
       els.map.append(li);
     });
@@ -88,12 +90,12 @@ export function createZoom({ getLang, gallery, readout }) {
   function fill(p) {
     const lang = getLang();
     els.category.textContent = p.category[lang];
-    els.title.textContent    = p.title;
-    els.summary.textContent  = p.summary[lang];
-    els.cat.textContent      = p.category[lang];
-    els.role.textContent     = p.role[lang];
+    els.title.textContent = p.title;
+    els.summary.textContent = p.summary[lang];
+    els.cat.textContent = p.category[lang];
+    els.role.textContent = p.role[lang];
     zoom.querySelector('[data-zoom-dt-category]').textContent = ZOOM_LABELS[lang].category;
-    zoom.querySelector('[data-zoom-dt-role]').textContent     = ZOOM_LABELS[lang].role;
+    zoom.querySelector('[data-zoom-dt-role]').textContent = ZOOM_LABELS[lang].role;
     els.link.innerHTML = `${ZOOM_LABELS[lang].view}<svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12 L12 4 M4.5 4 H12 V11.5"/></svg>`;
     els.link.href = p.href;
   }
@@ -112,18 +114,18 @@ export function createZoom({ getLang, gallery, readout }) {
     const state = Flip.getState(figure);
 
     fill(p);
-    els.image.src            = p.image;
+    els.image.src = p.image;
     els.image.dataset.flipId = flipId;
     updateMap(id);
     zoom.hidden = false;
     document.documentElement.classList.add('is-zoom-open');
 
     Flip.from(state, {
-      targets:  els.image,
+      targets: els.image,
       duration: 0.92,
-      ease:     'expo.inOut',
+      ease: 'expo.inOut',
       absolute: true,
-      fade:     true,
+      fade: true,
       onComplete: () => {
         delete figure.dataset.flipId;
         delete els.image.dataset.flipId;
@@ -131,8 +133,19 @@ export function createZoom({ getLang, gallery, readout }) {
         fractal = mountFractalEffect(zoom);
       },
     });
-    gsap.fromTo(zoom, { backgroundColor: 'rgba(255,255,255,0)' }, { backgroundColor: '#ffffff', duration: 0.72, ease: 'power2.out' });
-    gsap.from(zoom.querySelectorAll('.projects-zoom__content > *'), { autoAlpha: 0, y: 22, duration: 0.72, ease: 'power3.out', stagger: 0.035, delay: 0.18 });
+    gsap.fromTo(
+      zoom,
+      { backgroundColor: 'rgba(255,255,255,0)' },
+      { backgroundColor: '#ffffff', duration: 0.72, ease: 'power2.out' },
+    );
+    gsap.from(zoom.querySelectorAll('.projects-zoom__content > *'), {
+      autoAlpha: 0,
+      y: 22,
+      duration: 0.72,
+      ease: 'power3.out',
+      stagger: 0.035,
+      delay: 0.18,
+    });
   }
 
   // ── Zoom schließen ─────────────────────────────────────────────────────────
@@ -142,18 +155,21 @@ export function createZoom({ getLang, gallery, readout }) {
     fractal = null;
     els.imageHost.classList.remove('Oi');
 
-    const id     = currentId;
+    const id = currentId;
     const flipId = `flipback-${id}`;
     els.image.dataset.flipId = flipId;
     const state = Flip.getState(els.image);
 
-    const figure = [...document.querySelectorAll(`.projects-marquee__figure[data-project-id="${id}"]`)]
-        .map((f) => ({ f, r: f.getBoundingClientRect() }))
-        .filter((o) => o.r.right > 0 && o.r.left < window.innerWidth)
-        .sort((a, b) =>
-            Math.abs(a.r.left + a.r.width / 2 - window.innerWidth / 2) -
-            Math.abs(b.r.left + b.r.width / 2 - window.innerWidth / 2),
-        )[0]?.f;
+    const figure = [
+      ...document.querySelectorAll(`.projects-marquee__figure[data-project-id="${id}"]`),
+    ]
+      .map((f) => ({ f, r: f.getBoundingClientRect() }))
+      .filter((o) => o.r.right > 0 && o.r.left < window.innerWidth)
+      .sort(
+        (a, b) =>
+          Math.abs(a.r.left + a.r.width / 2 - window.innerWidth / 2) -
+          Math.abs(b.r.left + b.r.width / 2 - window.innerWidth / 2),
+      )[0]?.f;
 
     if (figure) figure.dataset.flipId = flipId;
     zoom.hidden = true;
@@ -166,7 +182,14 @@ export function createZoom({ getLang, gallery, readout }) {
       gallery?.freeze(false);
     };
     if (figure) {
-      Flip.from(state, { targets: figure, duration: 0.78, ease: 'expo.inOut', absolute: true, fade: true, onComplete: finish });
+      Flip.from(state, {
+        targets: figure,
+        duration: 0.78,
+        ease: 'expo.inOut',
+        absolute: true,
+        fade: true,
+        onComplete: finish,
+      });
     } else {
       finish();
     }
@@ -198,7 +221,7 @@ export function createZoom({ getLang, gallery, readout }) {
 
     // 4. Neues Bild setzen und warten bis es geladen ist (wichtig für Fractal-Textur).
     await new Promise((resolve) => {
-      els.image.onload  = resolve;
+      els.image.onload = resolve;
       els.image.onerror = resolve;
       els.image.src = p.image;
       // Falls das Bild bereits im Browser-Cache ist, feuert onload nicht.
@@ -219,7 +242,9 @@ export function createZoom({ getLang, gallery, readout }) {
   }
 
   zoom.querySelector('[data-zoom-close]').addEventListener('click', close);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
+  });
 
   return { open, refill };
 }

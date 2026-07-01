@@ -1,12 +1,110 @@
 // ── Projektdaten ─────────────────────────────────────────────────────────────
 export const PROJECTS = [
-  { id: 'noart',          title: 'NoArt.',             category: { en: 'Web site',  de: 'Webseite'  }, role: { en: 'DESIGN | FRONT-END DEVELOPMENT | CSS FOCUS',           de: 'DESIGN | FRONT-END ENTWICKLUNG | CSS FOKUS'           }, summary: { en: 'Minimalist art portfolio with 3D-textured paintings, a dark/light theme toggle, parallax scroll animations, and a contact form — built with pure HTML, CSS & Vanilla JS, no frameworks.',   de: 'Minimalistisches Kunstportfolio mit 3D-texturierten Gemälden, Dark/Light-Theme, Parallax-Scroll-Animationen und Kontaktformular – reines HTML, CSS & Vanilla JS, ohne Frameworks.'    }, href: 'https://paul-cs-seidel.github.io/NoArt./',       image: '/assets/projects/noart.png'        },
-  { id: 'siderun',        title: 'SIDERUN',            category: { en: 'Demo site', de: 'Demoseite' }, role: { en: 'FUNCTION | FRONT-END DEVELOPMENT | JAVASCRIPT',        de: 'FUNCTION | FRONT-END ENTWICKLUNG | JAVASCRIPT'        }, summary: { en: 'Lightweight JS & CSS library (~5 KB) that adds an animated flying-border effect to any element. Zero dependencies, GPU-accelerated 60 fps — ideal for navbars, buttons, and cards.', de: 'Schlanke JS & CSS Bibliothek (~5 KB) für animierte Laufrahmen-Effekte auf beliebigen Elementen. Keine Abhängigkeiten, GPU-beschleunigt mit 60 fps – ideal für Navbars, Buttons und Cards.'  }, href: 'https://paul-cs-seidel.github.io/SideRun/',      image: '/assets/projects/siderun.png'      },
-  { id: 'portfolio_2026', title: 'Portfolio 2026',     category: { en: 'Web site',  de: 'Webseite'  }, role: { en: 'DESIGN | FRONT-END DEVELOPMENT | ANIMATION',          de: 'DESIGN | FRONT-END ENTWICKLUNG | ANIMATION'           }, summary: { en: 'An earlier portfolio prototype exploring WebGL canvas effects, GSAP-powered scroll animations, and 3D motion design — a creative playground for advanced frontend techniques.',        de: 'Früherer Portfolio-Prototyp mit WebGL-Canvas-Effekten, GSAP-Scroll-Animationen und 3D-Motion-Design – ein kreatives Spielfeld für fortgeschrittene Frontend-Techniken.'            }, href: 'https://paul-seidel.pages.dev',                  image: '/assets/Hero.png'                  },
-  { id: 'aurascent',      title: 'AuraScent',          category: { en: 'Web site',  de: 'Webseite'  }, role: { en: 'DESIGN | FRONT-END DEVELOPMENT | BACKEND DEVELOPMENT', de: 'DESIGN | FRONT-END ENTWICKLUNG | BACKEND ENTWICKLUNG' }, summary: { en: 'Full-stack perfume e-commerce with Node.js, Express & SQLite — 80+ products in 10 categories, real-time search, session cart, wishlist, auth with rate-limiting, and an admin panel.',  de: 'Fullstack-Parfüm-Shop mit Node.js, Express & SQLite – 80+ Produkte in 10 Kategorien, Echtzeitsuche, Session-Warenkorb, Wunschliste, Login mit Rate-Limiting und Admin-Panel.'         }, href: 'https://aurascent-3b4i.onrender.com',            image: '/assets/projects/aurascent.png'    },
-  { id: 'kernwerksystems', title: 'Kernwerk Systems',  category: { en: 'Web site',  de: 'Webseite'  }, role: { en: 'DESIGN | FRONT-END DEVELOPMENT | WORDPRESS STYLE',     de: 'DESIGN | FRONT-END ENTWICKLUNG | WORDPRESS STIL'      }, summary: { en: 'Concept website for a fictional systems company — smooth scroll-based navigation, motion-driven project browsing, and a WordPress-inspired editorial layout.',                         de: 'Konzeptwebsite für ein fiktives Systemunternehmen – flüssige Scroll-Navigation, animiertes Projekt-Browsing und ein WordPress-inspiriertes redaktionelles Layout.'                  }, href: 'https://kernwerk-systems.pages.dev',             image: '/assets/projects/kernwerksystems.png'},
-  { id: 'mensuratemporis', title: 'Mensura Temporis',  category: { en: 'Demo site', de: 'Demoseite' }, role: { en: 'DESIGN | FRONT-END DEVELOPMENT | APP STYLE',           de: 'DESIGN | FRONT-END ENTWICKLUNG | APP STIL'            }, summary: { en: 'A 2022 portfolio site built with an app-style layout — an early exploration of single-page design, custom routing, and responsive component-based architecture.',                   de: '2022 entstandene Portfolio-Seite im App-Stil – eine frühe Erkundung von Single-Page-Designs, eigener Navigation und komponentenbasierter Responsive-Architektur.'                      }, href: 'https://mensura-temporis.pages.dev',             image: '/assets/projects/mensuratemporis.png'},
-  { id: 'ihkap1',         title: 'IHK AP 1 Lernseite', category: { en: 'Web site', de: 'Webseite'  }, role: { en: 'STUDYING | KNOWLEDGE | LOCAL STORAGE SYSTEM',          de: 'LERNEN | WISSENSÜBERMITTLUNG | LOKALES SPEICHERSYSTEM'}, summary: { en: 'Interactive study site for the German IHK AP1 exam — covering networks, databases, project management, IT security, and more. Includes self-tests, a countdown timer, and localStorage checklists.', de: 'Interaktive Lernseite für die IHK-Abschlussprüfung Teil 1 – Netzwerke, Datenbanken, Projektmanagement, IT-Sicherheit u. v. m. Mit Selbsttests, Prüfungs-Countdown und localStorage-Checklisten.'}, href: 'https://paul-cs-seidel.github.io/IHK-Lernseite/', image: '/assets/projects/ihkap1.png'      }
+  {
+    id: 'noart',
+    title: 'NoArt.',
+    category: { en: 'Web site', de: 'Webseite' },
+    role: {
+      en: 'DESIGN | FRONT-END DEVELOPMENT | CSS FOCUS',
+      de: 'DESIGN | FRONT-END ENTWICKLUNG | CSS FOKUS',
+    },
+    summary: {
+      en: 'Minimalist art portfolio with 3D-textured paintings, a dark/light theme toggle, parallax scroll animations, and a contact form — built with pure HTML, CSS & Vanilla JS, no frameworks.',
+      de: 'Minimalistisches Kunstportfolio mit 3D-texturierten Gemälden, Dark/Light-Theme, Parallax-Scroll-Animationen und Kontaktformular – reines HTML, CSS & Vanilla JS, ohne Frameworks.',
+    },
+    href: 'https://paul-cs-seidel.github.io/NoArt./',
+    image: '/assets/projects/noart.png',
+  },
+  {
+    id: 'siderun',
+    title: 'SIDERUN',
+    category: { en: 'Demo site', de: 'Demoseite' },
+    role: {
+      en: 'FUNCTION | FRONT-END DEVELOPMENT | JAVASCRIPT',
+      de: 'FUNCTION | FRONT-END ENTWICKLUNG | JAVASCRIPT',
+    },
+    summary: {
+      en: 'Lightweight JS & CSS library (~5 KB) that adds an animated flying-border effect to any element. Zero dependencies, GPU-accelerated 60 fps — ideal for navbars, buttons, and cards.',
+      de: 'Schlanke JS & CSS Bibliothek (~5 KB) für animierte Laufrahmen-Effekte auf beliebigen Elementen. Keine Abhängigkeiten, GPU-beschleunigt mit 60 fps – ideal für Navbars, Buttons und Cards.',
+    },
+    href: 'https://paul-cs-seidel.github.io/SideRun/',
+    image: '/assets/projects/siderun.png',
+  },
+  {
+    id: 'portfolio_2026',
+    title: 'Portfolio 2026',
+    category: { en: 'Web site', de: 'Webseite' },
+    role: {
+      en: 'DESIGN | FRONT-END DEVELOPMENT | ANIMATION',
+      de: 'DESIGN | FRONT-END ENTWICKLUNG | ANIMATION',
+    },
+    summary: {
+      en: 'An earlier portfolio prototype exploring WebGL canvas effects, GSAP-powered scroll animations, and 3D motion design — a creative playground for advanced frontend techniques.',
+      de: 'Früherer Portfolio-Prototyp mit WebGL-Canvas-Effekten, GSAP-Scroll-Animationen und 3D-Motion-Design – ein kreatives Spielfeld für fortgeschrittene Frontend-Techniken.',
+    },
+    href: 'https://paul-seidel.pages.dev',
+    image: '/assets/Hero.png',
+  },
+  {
+    id: 'aurascent',
+    title: 'AuraScent',
+    category: { en: 'Web site', de: 'Webseite' },
+    role: {
+      en: 'DESIGN | FRONT-END DEVELOPMENT | BACKEND DEVELOPMENT',
+      de: 'DESIGN | FRONT-END ENTWICKLUNG | BACKEND ENTWICKLUNG',
+    },
+    summary: {
+      en: 'Full-stack perfume e-commerce with Node.js, Express & SQLite — 80+ products in 10 categories, real-time search, session cart, wishlist, auth with rate-limiting, and an admin panel.',
+      de: 'Fullstack-Parfüm-Shop mit Node.js, Express & SQLite – 80+ Produkte in 10 Kategorien, Echtzeitsuche, Session-Warenkorb, Wunschliste, Login mit Rate-Limiting und Admin-Panel.',
+    },
+    href: 'https://aurascent-3b4i.onrender.com',
+    image: '/assets/projects/aurascent.png',
+  },
+  {
+    id: 'kernwerksystems',
+    title: 'Kernwerk Systems',
+    category: { en: 'Web site', de: 'Webseite' },
+    role: {
+      en: 'DESIGN | FRONT-END DEVELOPMENT | WORDPRESS STYLE',
+      de: 'DESIGN | FRONT-END ENTWICKLUNG | WORDPRESS STIL',
+    },
+    summary: {
+      en: 'Concept website for a fictional systems company — smooth scroll-based navigation, motion-driven project browsing, and a WordPress-inspired editorial layout.',
+      de: 'Konzeptwebsite für ein fiktives Systemunternehmen – flüssige Scroll-Navigation, animiertes Projekt-Browsing und ein WordPress-inspiriertes redaktionelles Layout.',
+    },
+    href: 'https://kernwerk-systems.pages.dev',
+    image: '/assets/projects/kernwerksystems.png',
+  },
+  {
+    id: 'mensuratemporis',
+    title: 'Mensura Temporis',
+    category: { en: 'Demo site', de: 'Demoseite' },
+    role: {
+      en: 'DESIGN | FRONT-END DEVELOPMENT | APP STYLE',
+      de: 'DESIGN | FRONT-END ENTWICKLUNG | APP STIL',
+    },
+    summary: {
+      en: 'A 2022 portfolio site built with an app-style layout — an early exploration of single-page design, custom routing, and responsive component-based architecture.',
+      de: '2022 entstandene Portfolio-Seite im App-Stil – eine frühe Erkundung von Single-Page-Designs, eigener Navigation und komponentenbasierter Responsive-Architektur.',
+    },
+    href: 'https://mensura-temporis.pages.dev',
+    image: '/assets/projects/mensuratemporis.png',
+  },
+  {
+    id: 'ihkap1',
+    title: 'IHK AP 1 Lernseite',
+    category: { en: 'Web site', de: 'Webseite' },
+    role: {
+      en: 'STUDYING | KNOWLEDGE | LOCAL STORAGE SYSTEM',
+      de: 'LERNEN | WISSENSÜBERMITTLUNG | LOKALES SPEICHERSYSTEM',
+    },
+    summary: {
+      en: 'Interactive study site for the German IHK AP1 exam — covering networks, databases, project management, IT security, and more. Includes self-tests, a countdown timer, and localStorage checklists.',
+      de: 'Interaktive Lernseite für die IHK-Abschlussprüfung Teil 1 – Netzwerke, Datenbanken, Projektmanagement, IT-Sicherheit u. v. m. Mit Selbsttests, Prüfungs-Countdown und localStorage-Checklisten.',
+    },
+    href: 'https://paul-cs-seidel.github.io/IHK-Lernseite/',
+    image: '/assets/projects/ihkap1.png',
+  },
 ];
 
 export const byId = new Map(PROJECTS.map((p) => [p.id, p]));

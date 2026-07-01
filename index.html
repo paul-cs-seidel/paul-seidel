@@ -1,74 +1,85 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <meta name="theme-color" content="#fff"/>
-  <title>Portfolio — Paul Seidel</title>
-  <link rel="stylesheet" href="/styles/main.css" />
-  <script type="module" src="/src/main.js"></script>
-</head>
-<body>
-<div class="persistent-experience" data-route="home">
-  <div class="webgl-background" aria-hidden="true"></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+      name="viewport"
+    />
+    <meta name="theme-color" content="#fff" />
 
-  <!-- Home -->
-  <main class="experience-page experience-page--home" data-route-panel="home">
-    <section class="hero-section page-shell" aria-label="Hero">
-      <div class="home-profile">
-        <p data-text-reveal-kicker data-en="APPLICATION DEVELOPMENT · TRAINEE" data-de="FACHINFORMATIKER ANWENDUNGSENTWICKLUNG">APPLICATION DEVELOPMENT · TRAINEE</p>
-        <h1 data-text-reveal-heading data-en="PAUL SEIDEL" data-de="PAUL SEIDEL">PAUL SEIDEL</h1>
-      </div>
-      <dl class="home-meta" aria-label="Home details">
-        <div>
-          <dt data-en="Base" data-de="Base">Base</dt>
-          <dd data-en="Germany, Kassel" data-de="Deutschland, Kassel">Germany, Kassel</dd>
-        </div>
-        <div>
-          <dt data-en="Focus" data-de="Focus">Focus</dt>
-          <dd data-en="UI/UX · CREATIVE" data-de="UI/UX · CREATIVE">UI/UX · CREATIVE</dd>
-        </div>
-        <div>
-          <dt data-en="Index" data-de="Index">Index</dt>
-          <dd data-en="Portfolio 2026" data-de="PORTFOLIO 2026">Portfolio 2026</dd>
-        </div>
-      </dl>
-    </section>
-  </main>
+    <!-- Standalone-Vollbild (über „Zum Home-Bildschirm"): ohne Safari-Leisten. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Paul Seidel" />
+    <title>Portfolio — Paul Seidel</title>
+    <meta
+      name="description"
+      content="Paul Seidel — Application Development Trainee from Kassel, Germany. Portfolio 2026 of UI/UX and creative front-end work."
+    />
+    <link rel="canonical" href="https://paul-seidel.com/" />
 
-  <!-- Projects -->
-  <main class="experience-page experience-page--projects" data-route-panel="projects" hidden>
-    <div class="projects-page">
-      <div class="projects-gridzoom">
-        <div class="header__left">
-            <button class="back-circle-control" type="button" data-back aria-label="Back to home">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" /></svg>
-            </button>
-            <div class="lang-toggle" aria-label="Language">
-              <button type="button" data-lang="en" aria-pressed="true">EN</button>
-              <button type="button" data-lang="de" aria-pressed="false">DE</button>
+    <!-- Icons / Manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Paul Seidel — Portfolio 2026" />
+    <meta
+      property="og:description"
+      content="Application Development Trainee from Kassel. UI/UX and creative front-end work."
+    />
+    <meta property="og:image" content="/assets/Hero.png" />
+    <meta property="og:url" content="https://paul-seidel.com" />
+
+    <link rel="stylesheet" href="/styles/main.css" />
+    <script type="module" src="/src/main.js"></script>
+  </head>
+  <body>
+    <div class="persistent-experience" data-route="home">
+      <div class="webgl-background" aria-hidden="true"></div>
+
+      <!-- Home -->
+      <main class="experience-page experience-page--home" data-route-panel="home">
+        <section class="hero-section page-shell" aria-label="Hero">
+          <div class="home-profile">
+            <p
+              data-text-reveal-kicker
+              data-en="APPLICATION DEVELOPMENT · TRAINEE"
+              data-de="FACHINFORMATIKER ANWENDUNGSENTWICKLUNG"
+            >
+              APPLICATION DEVELOPMENT · TRAINEE
+            </p>
+            <h1 data-text-reveal-heading data-en="PAUL SEIDEL" data-de="PAUL SEIDEL">
+              PAUL SEIDEL
+            </h1>
+          </div>
+          <dl class="home-meta" aria-label="Home details">
+            <div>
+              <dt data-en="Base" data-de="Base">Base</dt>
+              <dd data-en="Germany, Kassel" data-de="Deutschland, Kassel">Germany, Kassel</dd>
             </div>
-        </div>
-        <div class="projects-gridzoom__intro">
-          <p data-en="My Projects" data-de="Meine Projekte">My Projects</p>
-          <h1 data-text-reveal-heading
-              data-en="A thought becomes an idea. An idea becomes a project. Eight projects that shaped how I think, design, and build."
-              data-de="Ein Gedanke wird zur Idee. Eine Idee wird zum Projekt. Acht Projekte, die geprägt haben, wie ich denke, gestalte und baue.">
-              A thought becomes an idea. An idea becomes a project. Eight projects that shaped how I think, design, and build.
-          </h1>
-        </div>
-        <!-- projects-gallery baut die Marquee hier hinein -->
-        <div class="projects-gl-gallery" data-gallery-root></div>
-      </div>
-    </div>
-  </main>
+            <div>
+              <dt data-en="Focus" data-de="Focus">Focus</dt>
+              <dd data-en="UI/UX · CREATIVE" data-de="UI/UX · CREATIVE">UI/UX · CREATIVE</dd>
+            </div>
+            <div>
+              <dt data-en="Index" data-de="Index">Index</dt>
+              <dd data-en="Portfolio 2026" data-de="PORTFOLIO 2026">Portfolio 2026</dd>
+            </div>
+          </dl>
+        </section>
+      </main>
 
-  <!-- About -->
-  <main class="experience-page experience-page--about" data-route-panel="about" hidden>
-    <div class="home-transition-page">
-      <div class="about-page">
-        <div class="page-shell">
-          <div class="header__left">
+      <!-- Projects -->
+      <main class="experience-page experience-page--projects" data-route-panel="projects" hidden>
+        <div class="projects-page">
+          <div class="projects-gridzoom">
+            <div class="header__left">
               <button class="back-circle-control" type="button" data-back aria-label="Back to home">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" /></svg>
               </button>
@@ -76,81 +87,180 @@
                 <button type="button" data-lang="en" aria-pressed="true">EN</button>
                 <button type="button" data-lang="de" aria-pressed="false">DE</button>
               </div>
-          </div>
-          <div class="about-page__content">
-            <div class="page-shell__intro">
-              <p data-en="About" data-de="Über Mich">About</p>
-              <h1 data-text-reveal-heading data-en="Creativity begins when you do something differently." data-de="Kreativität beginnt, wenn du etwas anders machst.">
-                Creativity begins when you do something differently.
+            </div>
+            <div class="projects-gridzoom__intro">
+              <p data-en="My Projects" data-de="Meine Projekte">My Projects</p>
+              <h1
+                data-text-reveal-heading
+                data-en="A thought becomes an idea. An idea becomes a project. Seven projects that shaped how I think, design, and build."
+                data-de="Ein Gedanke wird zur Idee. Eine Idee wird zum Projekt. Sieben Projekte, die geprägt haben, wie ich denke, gestalte und baue."
+              >
+                A thought becomes an idea. An idea becomes a project. Seven projects that shaped how
+                I think, design, and build.
               </h1>
             </div>
-            <div class="about-page__body">
-              <p data-en="A thought that grows into an idea, that turns into a project, that helps people. That is what drives me. I love shaping projects and making them real. Projects that can genuinely help people. Projects that are simple and intuitive to use. A single thought can sometimes do so much, and I want to be the one who brings that thought into the world."
-                 data-de="Ein Gedanke der zu einer Idee heranwächst, die zu einem Projekt wird, das Menschen hilft. Das ist es, was mich antreibt. Ich liebe es Projekte zu gestalten und umzusetzen. Projekte welche Menschen wirklich helfen können. Projekte die einfach und intuitiv benutzt werden können. Ein Gedanke kann manchmal so viel bewirken und ich möchte derjenige sein, der diesen Gedanken in die Welt bringt.">
-                A thought that grows into an idea, that turns into a project, that helps people. That is what drives me. I love shaping projects and making them real. Projects that can genuinely help people. Projects that are simple and intuitive to use. A single thought can sometimes do so much, and I want to be the one who brings that thought into the world.
-              </p>
-              <dl class="about-page__meta">
-                <div>
-                  <dt data-en="Name" data-de="Name">Name</dt>
-                  <dd data-en="Paul Seidel" data-de="Paul Seidel">Paul Seidel</dd>
-                </div>
-                <div>
-                  <dt data-en="Role" data-de="Rolle">Role</dt>
-                  <dd data-en="Application Development" data-de="Fachinformatiker Anwendungsentwicklung">Application Development</dd>
-                </div>
-                <div>
-                  <dt data-en="Contact" data-de="Kontakt">Contact</dt>
-                  <dd class="about-page__contact-links">
-                    <a href="mailto:info@paul-seidel.com">info@paul-seidel.com<svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12 L12 4 M4.5 4 H12 V11.5"/></svg></a>
-                    <a href="#">LinkedIn<svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12 L12 4 M4.5 4 H12 V11.5"/></svg></a>
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
+            <!-- projects-gallery baut die Marquee hier hinein -->
+            <div class="projects-gl-gallery" data-gallery-root></div>
           </div>
         </div>
-      </div>
-    </div>
-  </main>
+      </main>
 
-  <!-- Contact -->
-  <main class="experience-page experience-page--contact" data-route-panel="contact" hidden>
-    <div class="home-transition-page">
-      <div class="contact-page">
-        <div class="page-shell">
-          <div class="header__left">
-              <button class="back-circle-control" type="button" data-back aria-label="Back to home">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" /></svg>
-              </button>
-              <div class="lang-toggle" aria-label="Language">
-                <button type="button" data-lang="en" aria-pressed="true">EN</button>
-                <button type="button" data-lang="de" aria-pressed="false">DE</button>
+      <!-- About -->
+      <main class="experience-page experience-page--about" data-route-panel="about" hidden>
+        <div class="home-transition-page">
+          <div class="about-page">
+            <div class="page-shell">
+              <div class="header__left">
+                <button
+                  class="back-circle-control"
+                  type="button"
+                  data-back
+                  aria-label="Back to home"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" /></svg>
+                </button>
+                <div class="lang-toggle" aria-label="Language">
+                  <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                  <button type="button" data-lang="de" aria-pressed="false">DE</button>
+                </div>
               </div>
-          </div>
-          <div class="contact-page__content">
-            <div class="page-shell__intro">
-              <p data-en="Contact" data-de="Kontakt">Contact</p>
-              <h1 data-text-reveal-heading data-en="Get in touch." data-de="Schreib mir">Get in touch.</h1>
-            </div>
-            <div class="contact-page__body">
-              <div class="contact-page__links">
-                <a href="mailto:info@paul-seidel.com">info@paul-seidel.com<svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12 L12 4 M4.5 4 H12 V11.5"/></svg></a>
-                <a href="#">LinkedIn<svg class="link-arrow" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12 L12 4 M4.5 4 H12 V11.5"/></svg></a>
+              <div class="about-page__content">
+                <div class="page-shell__intro">
+                  <p data-en="About" data-de="Über Mich">About</p>
+                  <h1
+                    data-text-reveal-heading
+                    data-en="Creativity begins when you do something differently."
+                    data-de="Kreativität beginnt, wenn du etwas anders machst."
+                  >
+                    Creativity begins when you do something differently.
+                  </h1>
+                </div>
+                <div class="about-page__body">
+                  <p
+                    data-en="A thought that grows into an idea, that turns into a project, that helps people. That is what drives me. I love shaping projects and making them real. Projects that can genuinely help people. Projects that are simple and intuitive to use. A single thought can sometimes do so much, and I want to be the one who brings that thought into the world."
+                    data-de="Ein Gedanke der zu einer Idee heranwächst, die zu einem Projekt wird, das Menschen hilft. Das ist es, was mich antreibt. Ich liebe es Projekte zu gestalten und umzusetzen. Projekte welche Menschen wirklich helfen können. Projekte die einfach und intuitiv benutzt werden können. Ein Gedanke kann manchmal so viel bewirken und ich möchte derjenige sein, der diesen Gedanken in die Welt bringt."
+                  >
+                    A thought that grows into an idea, that turns into a project, that helps people.
+                    That is what drives me. I love shaping projects and making them real. Projects
+                    that can genuinely help people. Projects that are simple and intuitive to use. A
+                    single thought can sometimes do so much, and I want to be the one who brings
+                    that thought into the world.
+                  </p>
+                  <dl class="about-page__meta">
+                    <div>
+                      <dt data-en="Name" data-de="Name">Name</dt>
+                      <dd data-en="Paul Seidel" data-de="Paul Seidel">Paul Seidel</dd>
+                    </div>
+                    <div>
+                      <dt data-en="Role" data-de="Rolle">Role</dt>
+                      <dd
+                        data-en="Application Development"
+                        data-de="Fachinformatiker Anwendungsentwicklung"
+                      >
+                        Application Development
+                      </dd>
+                    </div>
+                    <div>
+                      <dt data-en="Contact" data-de="Kontakt">Contact</dt>
+                      <dd class="about-page__contact-links">
+                        <a href="mailto:info@paul-seidel.com"
+                          >info@paul-seidel.com<svg
+                            class="link-arrow"
+                            viewBox="0 0 16 16"
+                            aria-hidden="true"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                          >
+                            <path d="M4 12 L12 4 M4.5 4 H12 V11.5" /></svg
+                        ></a>
+                        <a href="#"
+                          >LinkedIn<svg
+                            class="link-arrow"
+                            viewBox="0 0 16 16"
+                            aria-hidden="true"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                          >
+                            <path d="M4 12 L12 4 M4.5 4 H12 V11.5" /></svg
+                        ></a>
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </main>
+      </main>
 
-  <nav class="site-nav" aria-label="Primary">
-    <a aria-current="page" data-route="home" href="#home" data-en="Home" data-de="Startseite">Home</a>
-    <a data-route="projects" href="#projects" data-en="Projects" data-de="Projekte">Projects</a>
-    <a data-route="about" href="#about" data-en="About" data-de="Über Mich">About</a>
-    <a data-route="contact" href="#contact" data-en="Contact" data-de="Kontakt">Contact</a>
-  </nav>
-</div>
-</body>
+      <!-- Contact -->
+      <main class="experience-page experience-page--contact" data-route-panel="contact" hidden>
+        <div class="home-transition-page">
+          <div class="contact-page">
+            <div class="page-shell">
+              <div class="header__left">
+                <button
+                  class="back-circle-control"
+                  type="button"
+                  data-back
+                  aria-label="Back to home"
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19" /></svg>
+                </button>
+                <div class="lang-toggle" aria-label="Language">
+                  <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                  <button type="button" data-lang="de" aria-pressed="false">DE</button>
+                </div>
+              </div>
+              <div class="contact-page__content">
+                <div class="page-shell__intro">
+                  <p data-en="Contact" data-de="Kontakt">Contact</p>
+                  <h1 data-glitch-title data-en="Get in touch." data-de="Schreib mir">
+                    Get in touch.
+                  </h1>
+                </div>
+                <div class="contact-page__body">
+                  <div class="contact-page__links">
+                    <a href="mailto:info@paul-seidel.com"
+                      >info@paul-seidel.com<svg
+                        class="link-arrow"
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      >
+                        <path d="M4 12 L12 4 M4.5 4 H12 V11.5" /></svg
+                    ></a>
+                    <a href="#"
+                      >LinkedIn<svg
+                        class="link-arrow"
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      >
+                        <path d="M4 12 L12 4 M4.5 4 H12 V11.5" /></svg
+                    ></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a aria-current="page" data-route="home" href="#home" data-en="Home" data-de="Startseite"
+          >Home</a
+        >
+        <a data-route="projects" href="#projects" data-en="Projects" data-de="Projekte">Projects</a>
+        <a data-route="about" href="#about" data-en="About" data-de="Über Mich">About</a>
+        <a data-route="contact" href="#contact" data-en="Contact" data-de="Kontakt">Contact</a>
+      </nav>
+    </div>
+  </body>
 </html>

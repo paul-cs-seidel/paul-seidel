@@ -43,10 +43,10 @@
 
 .page-shell {
   height: 100dvh;
-  padding-top:    var(--ui-edge-y-top);
+  padding-top: var(--ui-edge-y-top);
   padding-bottom: var(--ui-edge-y-bottom);
-  padding-left:   var(--ui-edge-x);
-  padding-right:  var(--ui-edge-x-right);
+  padding-left: var(--ui-edge-x);
+  padding-right: var(--ui-edge-x-right);
   grid-template-rows: auto minmax(0, 1fr);
   display: grid;
   overflow: hidden;
@@ -161,8 +161,11 @@
 }
 
 .contact-page__content .page-shell__intro h1 {
-  font-size: max(34px, min(5.2vw, 49.4px + 1.82vw));
-  line-height: 0.96;
+  /* Einzige Größen-Quelle: Platzhalter-Text UND Glitch-Effekt (sizeScale 1)
+     übernehmen exakt diese Schriftgröße. */
+  font-size: clamp(52px, 11vw, 150px);
+  line-height: 1;
+  white-space: nowrap;
 }
 
 @media (max-width: 620px) {

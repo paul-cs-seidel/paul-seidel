@@ -1,10 +1,9 @@
 /*
- * fractalEffect — native WebGL-Port des vendor/split `Oi`-Bild-Hovers.
+ * fractalEffect — nativer WebGL-Bildhover für `.Oi`-Hosts.
  *
- * Pro `.Oi`-Host wird ein Canvas ueber das vorhandene Bild gelegt. Der Shader
- * ist aus `webgl-oi.js` (`Xt`, Fragment `th`, Vertex `eh`) uebernommen; dieses
- * Modul kapselt nur die DOM-, Texture-, Resize- und Pointer-Ansteuerung passend
- * zum aktuellen paul-seidel Effekt-System.
+ * Pro `.Oi`-Host wird ein Canvas über das vorhandene Bild gelegt; das Modul
+ * kapselt DOM-, Texture-, Resize- und Pointer-Ansteuerung. Der verzerrende
+ * Maus-Shader liegt in fractal-effect.config.js.
  */
 import gsap from 'gsap';
 
@@ -25,7 +24,6 @@ function mergeOptions(options) {
     ...options,
     dpr: { ...DEFAULT_FRACTAL_OPTIONS.dpr, ...(options.dpr || {}) },
     mouse: { ...DEFAULT_FRACTAL_OPTIONS.mouse, ...(options.mouse || {}) },
-    reveal: { ...DEFAULT_FRACTAL_OPTIONS.reveal, ...(options.reveal || {}) },
     uniforms: { ...DEFAULT_FRACTAL_OPTIONS.uniforms, ...(options.uniforms || {}) },
   };
 }
@@ -130,12 +128,7 @@ class FractalImage {
 
     const program = createProgram(gl, VERTEX_SHADER, FRAGMENT_SHADER);
     const buffer = gl.createBuffer();
-    const data = new Float32Array([
-      -1, -1, 0, 0,
-      1, -1, 1, 0,
-      -1, 1, 0, 1,
-      1, 1, 1, 1,
-    ]);
+    const data = new Float32Array([-1, -1, 0, 0, 1, -1, 1, 0, -1, 1, 0, 1, 1, 1, 1, 1]);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
@@ -166,7 +159,11 @@ class FractalImage {
     gl.uniform1f(this.uniforms.get('uStart'), this.cfg.uniforms.uStart);
     gl.uniform1f(this.uniforms.get('uStart1'), this.cfg.uniforms.uStart1);
     gl.uniform2f(this.uniforms.get('uMouse'), this.mouse.current, this.cfg.uniforms.uMouse[1]);
-    gl.uniform2f(this.uniforms.get('uTextureSize'), this.image.naturalWidth, this.image.naturalHeight);
+    gl.uniform2f(
+      this.uniforms.get('uTextureSize'),
+      this.image.naturalWidth,
+      this.image.naturalHeight,
+    );
 
     this.gl = gl;
     this.program = program;
@@ -240,7 +237,12 @@ class FractalImage {
   }
 
   shouldRender() {
-    return this.ready && (this.dirty || this.active || Math.abs(this.mouse.current - this.mouse.target) > this.cfg.mouse.settle);
+    return (
+      this.ready &&
+      (this.dirty ||
+        this.active ||
+        Math.abs(this.mouse.current - this.mouse.target) > this.cfg.mouse.settle)
+    );
   }
 
   tick(time) {

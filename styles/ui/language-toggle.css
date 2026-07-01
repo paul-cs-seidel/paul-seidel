@@ -16,7 +16,9 @@
   background: 0 0;
   border: 0;
   padding: 0;
-  transition: color 0.18s, transform 0.18s;
+  transition:
+    color 0.18s,
+    transform 0.18s;
 }
 
 .lang-toggle button:hover {

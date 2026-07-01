@@ -20,11 +20,11 @@ const gallery = mount(document.querySelector('.projects-page'));
 
 // b) oder Markup aus Daten bauen:
 const gallery = mount(container, {
-  projects: [{ id: 'demo', image: '/demo.png' }, /* … */],
-  onSelect: (index, el) => openDetail(index),   // Item-Klick
+  projects: [{ id: 'demo', image: '/demo.png' } /* … */],
+  onSelect: (index, el) => openDetail(index), // Item-Klick
 });
 
-gallery.freeze(true);   // Route-Freeze (Autoscroll stoppen)
+gallery.freeze(true); // Route-Freeze (Autoscroll stoppen)
 gallery.destroy();
 ```
 
@@ -32,7 +32,7 @@ Antrieb: **GSAP** (`gsap.ticker`, `gsap.quickSetter`). Listener via `AbortContro
 
 ## Herkunft & Abweichungen
 
-`_raw/vendor/050096.app-bundle.js` — Helfer `sn/si/so` (Z6327–6368), Komponente
+Original-App-Bundle (nicht im Repo) — Helfer `sn/si/so` (Z6327–6368), Komponente
 `sl` (ab Z6369). Jeder Wert in der Config trägt seine Zeilennummer.
 
 - **FLIP-Zoom abstrahiert:** Das Original zoomt eine Karte per GSAP-**Flip** in

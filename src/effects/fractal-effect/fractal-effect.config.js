@@ -1,11 +1,6 @@
 /*
- * fractal-effect.config.js — Oi/Image-Hover aus
- * /Users/paulseidel/Downloads/Paul-Seidel-Portfolio-main.zip extrahiert.
- *
- * Quelle: vendor/split/webgl-oi.js
- *   - Klasse `Xt` = Bild-Oi mit Mouse-Distortion (Z387–522)
- *   - Fragment `th` / Vertex `eh` (Z523–605)
- *   - createEls()-Uniforms fuer normale Bild-Oi (Z3840–3882)
+ * fractal-effect.config.js — Stellschrauben des `.Oi`-WebGL-Bildhovers
+ * (Maus-Distortion-Shader): Events, CSS-Klassen, Uniforms und Shader-Quellen.
  */
 
 export const FRACTAL_EVENTS = Object.freeze({
@@ -31,20 +26,14 @@ export const DEFAULT_FRACTAL_OPTIONS = Object.freeze({
   lazy: false,
   maxInstances: 6,
   dpr: Object.freeze({
-    min: 2, // original: Math.max(window.devicePixelRatio, 2)
+    min: 2,
     max: 2.5,
   }),
   mouse: Object.freeze({
-    enterEase: 0.03, // Xt.mvFn()
-    leaveEase: 0.01, // Xt.lvFn()
-    idleEase: 0.06, // Xt constructor
+    enterEase: 0.03,
+    leaveEase: 0.01,
+    idleEase: 0.06,
     settle: 0.0006,
-  }),
-  reveal: Object.freeze({
-    from: 0.8, // Xt animctr default; data-op flips to -0.8 in original
-    to: 0,
-    duration: 0.5, // GSAP default tween duration in the vendor timeline
-    ease: 'power2.inOut',
   }),
   uniforms: Object.freeze({
     uStart: 0,

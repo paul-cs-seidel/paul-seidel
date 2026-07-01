@@ -1,0 +1,58 @@
+/*
+ * glitch-title.css — Bühne, Canvas und Fallback des MSDF-Glitch-Titels.
+ * Logik/Shader: ../../src/effects/glitch-title/.
+ */
+
+/* PP Neue Montreal — passend zum MSDF-Atlas, damit Fallback-Text + Box-Metrik
+   der Glitch-Überschrift zur WebGL-Darstellung passen. */
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/assets/fonts/montreal.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/assets/fonts/montrealbook.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Bühne = Offset-Parent des Canvas. */
+.glitch-title-stage {
+  position: relative;
+}
+
+/* Glitch-Überschrift: Atlas-Schrift, damit der DOM-Fallback identisch sitzt. */
+[data-glitch-title] {
+  font-family: 'PP Neue Montreal', helvetica-neue-lt-pro, sans-serif;
+}
+
+/* Sobald WebGL läuft, übernimmt der Canvas — der DOM-Text bleibt für
+   Screenreader/SEO erhalten, wird aber unsichtbar. */
+[data-glitch-title].is-glitch-ready {
+  color: transparent;
+}
+
+/* WebGL fehlgeschlagen → schlichter Text bleibt sichtbar (Fallback). */
+[data-glitch-title].is-glitch-failed {
+  color: inherit;
+}
+
+.glitch-title__canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  /* Events gehen durch zum H1 darunter (Hover) und zu den Links → nicht blockieren. */
+  pointer-events: none;
+}
+
+/* Reduced-Motion: kein WebGL (JS no-op) → Text muss sichtbar bleiben. */
+@media (prefers-reduced-motion: reduce) {
+  [data-glitch-title].is-glitch-ready {
+    color: inherit;
+  }
+}
